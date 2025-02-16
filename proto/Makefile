@@ -2,7 +2,7 @@
 
 PROTOC_ARGS := -I=. --go_out=../internal/api --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative
 
-all: requirements msg api cmd
+all: requirements msg cmd
 
 requirements:
 	go mod download
@@ -12,9 +12,6 @@ requirements:
 msg:
 	protoc ${PROTOC_ARGS} msg/endnode_uplink.proto
 
-api:
-
-
 cmd:
-	
+	protoc ${PROTOC_ARGS} cmd/propagate_endnode.proto
 

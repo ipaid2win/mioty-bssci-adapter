@@ -4,47 +4,48 @@ syntax = "proto3";
 
 package cmd;
 
-
-
-option go_package = "mioty-bssci-adapter/internal/api/msg";
+option go_package = "mioty-bssci-adapter/internal/api/cmd";
 // option features.(pb.go).api_level = API_OPAQUE;
 
 
 message PropagateEndnode{
-  // Endnode EUI.
-  string endnode_eui = 1;
-
-
-
+    // Endnode EUI.
+    string endnode_eui = 1;
+    // Command.
+    oneof command {
+        // Server attachment
+        PropagateAttach prpAtt = 2;
+        // Server detachment
+        PropagateDetach prpDet = 3;
+    }
 }
 
 
 message PropagateAttach{
-    // Endnode EUI.
-    string endnode_eui = 1;
-  
-  
+    // End Point short address
+    uint32 sh_addr = 1;
+
+    // 16 Byte End Point network session key
+    bytes nwk_session_key = 2;
+
+    // Packet counter.
+    int32 last_packet_cnt = 3;
+
+    // True if End Point is bidirectional
+    bool bidi = 4;
+
     // True if End Point uses dual channel mode
-    bool dual_channel = 6;
+    bool dual_channel = 5;
 
     // True if End Point uses DL repetition
-    bool repetition = 7;
+    bool repetition = 6;
 
     // True if End Point uses wide carrier offset
-    bool wide_carr_off = 8;
+    bool wide_carr_off = 7;
 
     // True if End Point uses long DL interblock distance
-    bool long_blk_dist = 9;
+    bool long_blk_dist = 8;
 }
 
 
-message PropagateDetach{
-    // Endnode EUI.
-    string endnode_eui = 1;
-
-
-
-
-  
-  
-}
+message PropagateDetach{}

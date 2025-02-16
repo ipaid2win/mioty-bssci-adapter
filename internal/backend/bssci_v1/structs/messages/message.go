@@ -3,6 +3,8 @@ package messages
 import (
 	"mioty-bssci-adapter/internal/backend/bssci_v1/structs"
 	"mioty-bssci-adapter/internal/common"
+	"mioty-bssci-adapter/internal/api/cmd"
+	"mioty-bssci-adapter/internal/api/msg"
 
 	"github.com/tinylib/msgp/msgp"
 )
@@ -25,6 +27,7 @@ type UplinkMessage interface {
 	Message
 	GetEndpointEui() common.EUI64
 	GetUplinkMetadata() UplinkMetadata
+	IntoProto() msg.EndnodeUplink
 }
 
 type UplinkMetadata struct {
@@ -41,6 +44,7 @@ type UplinkMetadata struct {
 type PropagateMessage interface {
 	Message
 	GetEndpointEui() common.EUI64
+	IntoProto() cmd.PropagateEndnode
 
 }
 
