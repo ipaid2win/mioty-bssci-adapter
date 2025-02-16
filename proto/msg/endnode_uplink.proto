@@ -11,100 +11,100 @@ option go_package = "mioty-bssci-adapter/internal/api/msg";
 // option features.(pb.go).api_level = API_OPAQUE;
 
 message EndnodeUplink {
-  // Gateway EUI.
-   string gateway_eui = 1;
-  // Endnode EUI.
-   string endnode_eui = 2;
-  // Metadata.
-   EndnodeUplinkMetadata meta = 3;
-  // Message.
-  oneof message {
-    // Over the air attachment
-    EndnodeAttMessage att = 4;
-    // Over the air detachment
-    EndnodeDetMessage det = 5;
-    // Uplink payload
-    EndnodeUlDataMessage ulData = 6;
+    // Gateway EUI.
+    string gateway_eui = 1;
+    // Endnode EUI.
+    string endnode_eui = 2;
+    // Metadata.
+    EndnodeUplinkMetadata meta = 3;
+    // Message.
+    oneof message {
+        // Over the air attachment
+        EndnodeAttMessage att = 4;
+        // Over the air detachment
+        EndnodeDetMessage det = 5;
+        // Uplink payload
+        EndnodeUlDataMessage ulData = 6;
 
-  }
+    }
 }
 
 
 
 message EndnodeUplinkMetadata {
-  // Gateway RX time.
-   google.protobuf.Timestamp rx_time = 1;
-  // Duration of the reception. (Optional)
-  optional google.protobuf.Duration rx_duration = 2;
-  // Packet counter.
-   uint32 packet_cnt = 3;
-  // Profile. (Optional)
-  optional string profile = 4;
-  // mioty Mode. (Optional)
-  optional string mode = 5;
-  // RSSI.
-   float rssi = 6;
-  // SNR.
-   float snr = 7;
-  // AWGN equivalent reception SNR. (Optional)
-  optional float eq_snr = 8;
-  // Reception info for every subpacket. (Optional)
-  repeated EndnodeUplinkSubpacket subpacket_info = 9;
+    // Gateway RX time.
+    google.protobuf.Timestamp rx_time = 1;
+    // Duration of the reception. (Optional)
+    optional google.protobuf.Duration rx_duration = 2;
+    // Packet counter.
+    uint32 packet_cnt = 3;
+    // Profile. (Optional)
+    optional string profile = 4;
+    // mioty Mode. (Optional)
+    optional string mode = 5;
+    // RSSI.
+    float rssi = 6;
+    // SNR.
+    float snr = 7;
+    // AWGN equivalent reception SNR. (Optional)
+    optional float eq_snr = 8;
+    // Reception info for every subpacket. (Optional)
+    repeated EndnodeUplinkSubpacket subpacket_info = 9;
 }
 
 message EndnodeUplinkSubpacket {
   // Subpacket signal to noise ratio in dB.
-   int32 snr = 1;
+  int32 snr = 1;
 
   // Subpacket signal strength in dBm.
-   int32 rssi = 2;
+  int32 rssi = 2;
 
   // Subpacket frequencies in Hz.
-   int32 frequency = 3;
+  int32 frequency = 3;
 
   // Subpacket phases in degree +-180. (Optional)
   optional int32 phase = 4;
 }
 
 message EndnodeAttMessage {
-  // ID of the operation
-   int64 op_id = 1;
+    // ID of the operation
+    int64 op_id = 1;
 
-  // Attachment_cnt counter.
-   uint32 attachment_cnt = 2;
+    // Attachment_cnt counter.
+    uint32 attachment_cnt = 2;
 
-  // End Point nonce
-   uint32 nonce = 3;
+    // End Point nonce
+    uint32 nonce = 3;
 
-  // End Point signature
-   uint32 sign = 4;
+    // End Point signature
+    uint32 sign = 4;
 
-  // End Point short address, only if assigned by the Base Station
-  optional uint32 sh_addr = 5;
+    // End Point short address, only if assigned by the Base Station
+    optional uint32 sh_addr = 5;
 
-  // True if End Point uses dual channel mode
-   bool dual_channel = 6;
+    // True if End Point uses dual channel mode
+    bool dual_channel = 6;
 
-  // True if End Point uses DL repetition
-   bool repetition = 7;
+    // True if End Point uses DL repetition
+    bool repetition = 7;
 
-  // True if End Point uses wide carrier offset
-   bool wide_carr_off = 8;
+    // True if End Point uses wide carrier offset
+    bool wide_carr_off = 8;
 
-  // True if End Point uses long DL interblock distance
-   bool long_blk_dist = 9;
+    // True if End Point uses long DL interblock distance
+    bool long_blk_dist = 9;
 }
 
 message EndnodeDetMessage {
-  // ID of the operation
-   int64 op_id = 1;
-  // End Point signature
-   uint32 sign = 2;
+    // ID of the operation
+    int64 op_id = 1;
+    // End Point signature
+    uint32 sign = 2;
 }
 
 message EndnodeUlDataMessage {
-  // End Point user data, might be empty
-   bytes data = 1;
-  // MPF header byte
-  optional uint32 format = 2;
+    // End Point user data, might be empty
+    bytes data = 1;
+    // MPF header byte
+    optional uint32 format = 2;
 }

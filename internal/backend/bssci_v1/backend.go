@@ -103,6 +103,12 @@ func NewBackend(conf config.Config) (backend *Backend, err error) {
 	return
 }
 
+
+// Stop stops the backend.
+func (b *Backend) GetBssciVersion() string {
+	return "1.0"
+}
+
 // Stop stops the backend.
 func (b *Backend) Stop() error {
 	b.isClosed = true
@@ -176,7 +182,6 @@ func (b *Backend) initBasestation(ctx context.Context, con messages.Con, conn ne
 		// stats:      stats.NewCollector(),
 		lastActive: time.Now(),
 		opId:       -1,
-		version:    con.Version,
 		SnBsUuid:   con.SnBsUuid.ToUuid(),
 		SnScUuid:   newUuid,
 	}

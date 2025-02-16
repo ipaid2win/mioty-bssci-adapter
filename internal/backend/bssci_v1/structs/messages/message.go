@@ -37,3 +37,10 @@ type UplinkMetadata struct {
 	EqSnr      *float64    `json:"eqSnr,omitempty"`
 	Subpackets *Subpackets `json:"subpackets,omitempty"`
 }
+
+type PropagateMessage interface {
+	Message
+	GetEndpointEui() common.EUI64
+
+}
+

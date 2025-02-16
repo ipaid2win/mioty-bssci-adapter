@@ -5,9 +5,7 @@ import (
 	"mioty-bssci-adapter/internal/common"
 
 	"github.com/google/uuid"
-	// "mioty-bssci-adapter/internal/common"
-	// "mioty-bssci-adapter/internal/common"
-	// "github.com/google/uuid"
+
 )
 
 //go:generate msgp
@@ -60,7 +58,7 @@ func (m *Con) GetCommand() structs.Command {
 }
 
 func (m *Con) GetEui() common.EUI64 {
-	return int64ToEui(m.BsEui)
+	return common.EUI64FromInt(m.BsEui)
 }
 
 // Connect response
@@ -124,10 +122,6 @@ func (m *ConRsp) GetCommand() structs.Command {
 	return structs.MsgConRsp
 }
 
-func (m *ConRsp) GetEui() common.EUI64 {
-	return int64ToEui(m.ScEui)
-}
-
 // Connect complete
 //
 // Basestation -> Service Center
@@ -149,20 +143,4 @@ func (m *ConCmp) GetCommand() structs.Command {
 	return structs.MsgConCmp
 }
 
-// helper function to parse the int64 formatted eui64
-func int64ToEui(in int64) common.EUI64 {
 
-	b := [8]byte{
-		byte(0xff & in),
-		byte(0xff & (in >> 8)),
-		byte(0xff & (in >> 16)),
-		byte(0xff & (in >> 24)),
-		byte(0xff & (in >> 32)),
-		byte(0xff & (in >> 40)),
-		byte(0xff & (in >> 48)),
-		byte(0xff & (in >> 56)),
-	}
-
-	return b
-
-}

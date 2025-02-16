@@ -1,0 +1,50 @@
+
+syntax = "proto3";
+// edition = "2023";
+
+package cmd;
+
+
+
+option go_package = "mioty-bssci-adapter/internal/api/msg";
+// option features.(pb.go).api_level = API_OPAQUE;
+
+
+message PropagateEndnode{
+  // Endnode EUI.
+  string endnode_eui = 1;
+
+
+
+}
+
+
+message PropagateAttach{
+    // Endnode EUI.
+    string endnode_eui = 1;
+  
+  
+    // True if End Point uses dual channel mode
+    bool dual_channel = 6;
+
+    // True if End Point uses DL repetition
+    bool repetition = 7;
+
+    // True if End Point uses wide carrier offset
+    bool wide_carr_off = 8;
+
+    // True if End Point uses long DL interblock distance
+    bool long_blk_dist = 9;
+}
+
+
+message PropagateDetach{
+    // Endnode EUI.
+    string endnode_eui = 1;
+
+
+
+
+  
+  
+}

@@ -10,6 +10,21 @@ import (
 // EUI64 data type
 type EUI64 [8]byte
 
+// helper function to parse a int64 formatted eui64
+func EUI64FromInt(in int64) EUI64 {
+	b := [8]byte{
+		byte(0xff & in),
+		byte(0xff & (in >> 8)),
+		byte(0xff & (in >> 16)),
+		byte(0xff & (in >> 24)),
+		byte(0xff & (in >> 32)),
+		byte(0xff & (in >> 40)),
+		byte(0xff & (in >> 48)),
+		byte(0xff & (in >> 56)),
+	}
+
+	return b
+}
 
 
 // MarshalText implements encoding.TextMarshaler.

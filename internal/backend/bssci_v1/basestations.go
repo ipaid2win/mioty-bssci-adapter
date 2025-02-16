@@ -71,32 +71,7 @@ func (g *basestations) setLastTimesync(eui common.EUI64, ts time.Time) error {
 	return nil
 }
 
-func (g *basestations) getVersion(eui common.EUI64) (*string, error) {
-	g.RLock()
-	defer g.RUnlock()
 
-	gw, ok := g.basestations[eui]
-	if !ok {
-		return nil, errGatewayDoesNotExist
-	}
-
-	return &gw.version, nil
-}
-
-func (g *basestations) setVersion(eui common.EUI64, version string) error {
-	g.Lock()
-	defer g.Unlock()
-
-	gw, ok := g.basestations[eui]
-	if !ok {
-		return errGatewayDoesNotExist
-	}
-
-	gw.version = version
-	g.basestations[eui] = gw
-
-	return nil
-}
 
 func (g *basestations) remove(eui common.EUI64) error {
 	g.Lock()

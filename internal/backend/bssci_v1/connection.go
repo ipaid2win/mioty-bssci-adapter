@@ -17,7 +17,6 @@ type connection struct {
 	conn       net.Conn
 	// stats      *stats.Collector
 	lastActive time.Time
-	version    string
 	opId       int64
 	// Base Station session UUID, used to resume session
 	SnBsUuid uuid.UUID

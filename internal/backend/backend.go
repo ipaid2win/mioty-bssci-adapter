@@ -43,5 +43,8 @@ type Backend interface {
 	// Start starts the backend.
 	Start() error
 
+	// BSSCI version used by the backend
+	GetBssciVersion() string
+
 
 }
