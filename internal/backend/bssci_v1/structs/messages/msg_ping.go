@@ -12,9 +12,9 @@ import "mioty-bssci-adapter/internal/backend/bssci_v1/structs"
 //
 // Service Center <-> Basestation
 type Ping struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewPing(opId int64) Ping {
@@ -33,9 +33,9 @@ func (m *Ping) GetCommand() structs.Command {
 //
 // Basestation <-> Service Center
 type PingRsp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewPingRsp(opId int64) PingRsp {
@@ -54,9 +54,9 @@ func (m *PingRsp) GetCommand() structs.Command {
 //
 // Service Center <-> Basestation
 type PingCmp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewPingCmp(opId int64) PingCmp {

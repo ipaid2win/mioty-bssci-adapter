@@ -15,11 +15,11 @@ import (
 // The detach propagate operation is initiated by the Service Center to propagate an End
 // Point detachment to the Base Station.
 type DetPrp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 	// End Point EUI64
-	EpEui common.EUI64 `msg:"epEui"`
+	EpEui common.EUI64 `msg:"epEui" json:"epEui"`
 }
 
 func NewDetPrp(
@@ -45,9 +45,9 @@ func (m *DetPrp) GetCommand() structs.Command {
 //
 // Basestation -> Service Center
 type DetPrpRsp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewDetPrpRsp(opId int64) DetPrpRsp {
@@ -69,9 +69,9 @@ func (m *DetPrpRsp) GetCommand() structs.Command {
 //
 // Service Center -> Basestation
 type DetPrpCmp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewDetPrpCmp(opId int64) DetPrpCmp {

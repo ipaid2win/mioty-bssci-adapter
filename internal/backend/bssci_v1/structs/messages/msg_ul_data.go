@@ -15,39 +15,39 @@ import (
 //
 // Basestation -> Service Center
 type UlData struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 	// End Point EUI64
-	EpEui common.EUI64 `msg:"epEui"`
+	EpEui common.EUI64 `msg:"epEui" json:"epEui"`
 	// Unix UTC time of reception, center of last subpacket, 64 bit, ns resolution
-	RxTime uint64 `msg:"rxTime"`
+	RxTime uint64 `msg:"rxTime" json:"rxTime"`
 	// Duration of the reception, center of first subpacket to center of last subpacket in ns, optional
-	RxDuration *uint64 `msg:"rxDuration,omitempty"`
+	RxDuration *uint64 `msg:"rxDuration,omitempty" json:"rxDuration,omitempty"`
 	// End Point packet counter
-	PacketCnt uint32 `msg:"packetCnt"`
+	PacketCnt uint32 `msg:"packetCnt" json:"packetCnt"`
 	// Reception signal to noise ratio in dB
-	SNR float64 `msg:"snr"`
+	SNR float64 `msg:"snr" json:"snr"`
 	// Reception signal strength in dBm
-	RSSI float64 `msg:"rssi"`
+	RSSI float64 `msg:"rssi" json:"rssi"`
 	// AWGN equivalent reception SNR in dB, optional
-	EqSnr *float64 `msg:"eqSnr,omitempty"`
+	EqSnr *float64 `msg:"eqSnr,omitempty" json:"eqSnr,omitempty"`
 	// Name of the Mioty profile used for reception, i.e. eu1, optional
-	Profile *string `msg:"profile,omitempty"`
+	Profile *string `msg:"profile,omitempty" json:"profile,omitempty"`
 	// Mioty mode and variant used for reception, i.e. ulp, ulp-rep, ulp-ll, optional
-	Mode *string `msg:"mode,omitempty"`
+	Mode *string `msg:"mode,omitempty" json:"mode,omitempty"`
 	// Subpackets object with reception info for every subpacket, optional
-	Subpackets *Subpackets `msg:"subpackets,omitempty"`
+	Subpackets *Subpackets `msg:"subpackets,omitempty" json:"subpackets,omitempty"`
 	// End Point user data, might be empty
-	UserData []byte `msg:"userData"`
+	UserData []byte `msg:"userData" json:"userData"`
 	// User data format identifier, 8 bit, optional, default 0
-	Format *byte `msg:"format,omitempty"`
+	Format *byte `msg:"format,omitempty" json:"format,omitempty"`
 	// True if End Point downlink window is opened
-	DlOpen bool `msg:"dlOpen"`
+	DlOpen bool `msg:"dlOpen" json:"dlOpen"`
 	// True if End Point expects a response in the DL window, requires dlOpen
-	ResponseExp bool `msg:"responseExp"`
+	ResponseExp bool `msg:"responseExp" json:"responseExp"`
 	// True if End Point acknowledges the reception of a DL transmission in the last DL window (packetCnt - 1)
-	DlAck bool `msg:"dlAck"`
+	DlAck bool `msg:"dlAck" json:"dlAck"`
 }
 
 func NewUlData(
@@ -121,9 +121,9 @@ func (m *UlData) GetTsUnbRxInformation() UplinkMetadata {
 //
 // Service Center -> Basestation
 type UlDataRsp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewUlDataRsp(opId int64) UlDataRsp {
@@ -145,9 +145,9 @@ func (m *UlDataRsp) GetCommand() structs.Command {
 //
 // Basestation -> Service Center
 type UlDataCmp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewUlDataCmp(opId int64) UlDataCmp {

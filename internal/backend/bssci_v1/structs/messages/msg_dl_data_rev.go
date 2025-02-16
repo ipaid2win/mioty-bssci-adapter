@@ -15,13 +15,13 @@ import (
 //
 // Service Center -> Basestation
 type DlDataRev struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 	// End Point EUI64
-	EpEui common.EUI64 `msg:"epEui"`
+	EpEui common.EUI64 `msg:"epEui" json:"epEui"`
 	// Assigned queue ID for reference, 64 bit
-	QueId uint64 `msg:"queId"`
+	QueId uint64 `msg:"queId" json:"queId"`
 }
 
 func NewDlDataRev(
@@ -49,9 +49,9 @@ func (m *DlDataRev) GetCommand() structs.Command {
 //
 // Basestation -> Service Center
 type DlDataRevRsp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewDlDataRevRsp(opId int64) DlDataRevRsp {
@@ -73,9 +73,9 @@ func (m *DlDataRevRsp) GetCommand() structs.Command {
 //
 // Service Center -> Basestation
 type DlDataRevCmp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewDlDataRevCmp(opId int64) DlDataRevCmp {

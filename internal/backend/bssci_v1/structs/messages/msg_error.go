@@ -15,13 +15,13 @@ import "mioty-bssci-adapter/internal/backend/bssci_v1/structs"
 //
 // Service Center <-> Basestation
 type BssciError struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 	// Error code, using POSIX error numbers,
-	Code uint32 `msg:"code"`
+	Code uint32 `msg:"code" json:"code"`
 	// Error message
-	Message string `msg:"message"`
+	Message string `msg:"message" json:"message"`
 }
 
 func NewBssciError(opId int64, code uint32, message string) BssciError {
@@ -40,9 +40,9 @@ func (m *BssciError) GetCommand() structs.Command {
 //
 // Basestation <-> Service Center
 type BssciErrorAck struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewBssciErrorAck(opId int64) BssciErrorAck {

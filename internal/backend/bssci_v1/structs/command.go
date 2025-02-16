@@ -3,9 +3,9 @@ package structs
 //go:generate msgp
 
 type CommandHeader struct {
-	Command Command `msg:"command"`
+	Command Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func (m *CommandHeader) GetCommand() Command {

@@ -5,7 +5,6 @@ import (
 	"mioty-bssci-adapter/internal/common"
 
 	"github.com/google/uuid"
-
 )
 
 //go:generate msgp
@@ -20,33 +19,33 @@ import (
 //
 // Basestation -> Service Center
 type Con struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 	// Requested protocol version, major.minor.patch
-	Version string `msg:"version"`
+	Version string `msg:"version" json:"version"`
 	// Base Station EUI64
-	BsEui int64 `msg:"bsEui"`
+	BsEui int64 `msg:"bsEui" json:"bsEui"`
 	// Vendor of the Base Station, optional
-	Vendor *string `msg:"vendor,omitempty"`
+	Vendor *string `msg:"vendor,omitempty" json:"vendor,omitempty"`
 	// Model of the Base Station, optional
-	Model *string `msg:"model,omitempty"`
+	Model *string `msg:"model,omitempty" json:"model,omitempty"`
 	// Name of the Base Station, optional
-	Name *string `msg:"name,omitempty"`
+	Name *string `msg:"name,omitempty" json:"name,omitempty"`
 	// Software version, optional
-	SwVersion *string `msg:"swVersion,omitempty"`
+	SwVersion *string `msg:"swVersion,omitempty" json:"swVersion,omitempty"`
 	// Additional Base Station information object, might contain arbitrary key-value-pairs, optional
-	Info map[string]interface{} `msg:"info,omitempty"`
+	Info map[string]interface{} `msg:"info,omitempty" json:"info,omitempty"`
 	// True if Base Station is bidirectional
-	Bidi bool `msg:"bidi"`
+	Bidi bool `msg:"bidi" json:"bidi"`
 	// Geographic location [Latitude, Longitude, Altitude], optional
-	GeoLocation *GeoLocation `msg:"geoLocation,omitempty"`
+	GeoLocation *GeoLocation `msg:"geoLocation,omitempty" json:"geoLocation,omitempty"`
 	// Base Station session UUID, must match with previous connect to resume session
-	SnBsUuid structs.SessionUuid `msg:"snBsUuid"`
+	SnBsUuid structs.SessionUuid `msg:"snBsUuid" json:"snBsUuid"`
 	// Minimum required known Base Station operation ID to resume previous session, optional
-	SnBsOpId *int64 `msg:"snBsOpId,omitempty"`
+	SnBsOpId *int64 `msg:"snBsOpId,omitempty" json:"snBsOpId,omitempty"`
 	// Maximum known Service Center operation ID to resume previous session, optional
-	SnScOpId *int64 `msg:"snScOpId,omitempty"`
+	SnScOpId *int64 `msg:"snScOpId,omitempty" json:"snScOpId,omitempty"`
 }
 
 func (m *Con) GetOpId() int64 {
@@ -65,27 +64,27 @@ func (m *Con) GetEui() common.EUI64 {
 //
 // Basestation -> Service Center
 type ConRsp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 	// Requested protocol version, major.minor.patch
-	Version string `msg:"version"`
+	Version string `msg:"version" json:"version"`
 	// Service Center EUI64
-	ScEui int64 `msg:"scEui"`
+	ScEui int64 `msg:"scEui" json:"scEui"`
 	// Vendor of the Service Center, optional
-	Vendor *string `msg:"vendor,omitempty"`
+	Vendor *string `msg:"vendor,omitempty" json:"vendor,omitempty"`
 	// Model of the Service Center, optional
-	Model *string `msg:"model,omitempty"`
+	Model *string `msg:"model,omitempty" json:"model,omitempty"`
 	// Name of the Service Center, optional
-	Name *string `msg:"name,omitempty"`
+	Name *string `msg:"name,omitempty" json:"name,omitempty"`
 	// Software version, optional
-	SwVersion *string `msg:"swVersion,omitempty"`
+	SwVersion *string `msg:"swVersion,omitempty" json:"swVersion,omitempty"`
 	// Additional Service Center information object, might contain arbitrary key-value-pairs, optional
-	Info map[string]interface{} `msg:"info,omitempty"`
+	Info map[string]interface{} `msg:"info,omitempty" json:"info,omitempty"`
 	// True if a previous session is resumed
-	SnResume bool `msg:"snResume"`
+	SnResume bool `msg:"snResume" json:"snResume"`
 	// Service Center session UUID, must match with previous connect to resume sessionF
-	SnScUuid structs.SessionUuid `msg:"snScUuid"`
+	SnScUuid structs.SessionUuid `msg:"snScUuid" json:"snScUuid"`
 }
 
 func NewConRsp(opId int64, version string, snScUuid uuid.UUID) ConRsp {
@@ -126,9 +125,9 @@ func (m *ConRsp) GetCommand() structs.Command {
 //
 // Basestation -> Service Center
 type ConCmp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewConCmp(opId int64) ConCmp {
@@ -142,5 +141,3 @@ func (m *ConCmp) GetOpId() int64 {
 func (m *ConCmp) GetCommand() structs.Command {
 	return structs.MsgConCmp
 }
-
-

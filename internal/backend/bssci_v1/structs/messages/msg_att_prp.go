@@ -3,7 +3,6 @@ package messages
 import (
 	"mioty-bssci-adapter/internal/backend/bssci_v1/structs"
 	"mioty-bssci-adapter/internal/common"
-
 )
 
 //go:generate msgp
@@ -18,27 +17,27 @@ import (
 //
 // Service Center -> Basestation
 type AttPrp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 	// End Point EUI64
-	EpEui common.EUI64 `msg:"epEui"`
+	EpEui common.EUI64 `msg:"epEui" json:"epEui"`
 	// True if End Point is bidirectional
-	Bidi bool `msg:"bidi"`
+	Bidi bool `msg:"bidi" json:"bidi"`
 	// 16 Byte End Point network session key
-	NwkSessionKey [16]byte `msg:"nwkSessionKey"`
+	NwkSessionKey [16]byte `msg:"nwkSessionKey" json:"nwkSessionKey"`
 	// End Point short address
-	ShAddr uint16 `msg:"shAddr"`
+	ShAddr uint16 `msg:"shAddr" json:"shAddr"`
 	// Last known End Point packet counter
-	LastPacketCount uint32 `msg:"lastPacketCount"`
+	LastPacketCount uint32 `msg:"lastPacketCount" json:"lastPacketCount"`
 	// True if End Point uses dual channel mode
-	DualChan bool `msg:"dualChan"`
+	DualChan bool `msg:"dualChan" json:"dualChan"`
 	// True if End Point uses DL repetition
-	Repetition bool `msg:"repetition"`
+	Repetition bool `msg:"repetition" json:"repetition"`
 	// True if End Point uses wide carrier offset
-	WideCarrOff bool `msg:"wideCarrOff"`
+	WideCarrOff bool `msg:"wideCarrOff" json:"wideCarrOff"`
 	// True if End Point uses long DL interblock distance
-	LongBlkDist bool `msg:"longBlkDist"`
+	LongBlkDist bool `msg:"longBlkDist" json:"longBlkDist"`
 }
 
 // TODO
@@ -59,9 +58,9 @@ func (m *AttPrp) GetCommand() structs.Command {
 //
 // Basestation -> Service Center
 type AttPrpRsp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewAttPrpRsp(opId int64) AttPrpRsp {
@@ -80,9 +79,9 @@ func (m *AttPrpRsp) GetCommand() structs.Command {
 //
 // Service Center -> Basestation
 type AttPrpCmp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewAttPrpCmp(opId int64) AttPrpCmp {

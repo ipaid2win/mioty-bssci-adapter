@@ -15,29 +15,29 @@ import (
 //
 // Basestation -> Service Center
 type Det struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 	// End Point EUI64
-	EpEui common.EUI64 `msg:"epEui"`
+	EpEui common.EUI64 `msg:"epEui" json:"epEui"`
 	// Unix UTC time of reception, center of last subpacket, 64 bit, ns resolution
-	RxTime uint64 `msg:"rxTime"`
+	RxTime uint64 `msg:"rxTime" json:"rxTime"`
 	// Duration of the reception, center of first subpacket to center of last subpacket in ns, optional
-	RxDuration *uint64 `msg:"rxDuration,omitempty"`
+	RxDuration *uint64 `msg:"rxDuration,omitempty" json:"rxDuration,omitempty"`
 	// End Point packet counter
-	PacketCnt uint32 `msg:"packetCnt"`
+	PacketCnt uint32 `msg:"packetCnt" json:"packetCnt"`
 	// Reception signal to noise ratio in dB
-	SNR float64 `msg:"snr"`
+	SNR float64 `msg:"snr" json:"snr"`
 	// Reception signal strength in dBm
-	RSSI float64 `msg:"rssi"`
+	RSSI float64 `msg:"rssi" json:"rssi"`
 	// AWGN equivalent reception SNR in dB, optional
-	EqSnr *float64 `msg:"eqSnr,omitempty"`
+	EqSnr *float64 `msg:"eqSnr,omitempty" json:"eqSnr,omitempty"`
 	// Name of the Mioty profile used for reception, i.e. eu1, optional
-	Profile *string `msg:"profile,omitempty"`
+	Profile *string `msg:"profile,omitempty" json:"profile,omitempty"`
 	// Subpackets object with reception info for every subpacket, optional
-	Subpackets *Subpackets `msg:"subpackets,omitempty"`
+	Subpackets *Subpackets `msg:"subpackets,omitempty" json:"subpackets,omitempty"`
 	// End Point signature
-	Sign [4]byte `msg:"sign"`
+	Sign [4]byte `msg:"sign" json:"sign"`
 }
 
 func NewDet(
@@ -105,11 +105,11 @@ func (m *Det) GetTsUnbRxInformation() UplinkMetadata {
 //
 // Service Center -> Basestation
 type DetRsp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 	// End Point signature
-	Sign [4]byte `msg:"sign"`
+	Sign [4]byte `msg:"sign" json:"sign"`
 }
 
 func NewDetRsp(opId int64, sign [4]byte) DetRsp {
@@ -132,9 +132,9 @@ func (m *DetRsp) GetCommand() structs.Command {
 //
 // Basestation -> Service Center
 type DetCmp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewDetCmp(opId int64) DetCmp {

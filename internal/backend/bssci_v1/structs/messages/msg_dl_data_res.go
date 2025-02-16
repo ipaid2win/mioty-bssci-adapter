@@ -15,19 +15,19 @@ import (
 //
 // Basestation -> Service Center
 type DlDataRes struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 	// End Point EUI64
-	EpEui common.EUI64 `msg:"epEui"`
+	EpEui common.EUI64 `msg:"epEui" json:"epEui"`
 	// Assigned queue ID for reference, 64 bit
-	QueId int64 `msg:"queId"`
+	QueId int64 `msg:"queId" json:"queId"`
 	// sent, expired, invalid
-	Result string `msg:"result"`
+	Result string `msg:"result" json:"result"`
 	// Unix UTC time of transmission, center of first subpacket, 64 bit, ns resolution, only if result is sent
-	TxTime *uint64 `msg:"txTime"`
+	TxTime *uint64 `msg:"txTime" json:"txTime"`
 	// End Point packet counter, only if result is “sent”
-	PacketCnt *uint32 `msg:"packetCnt"`
+	PacketCnt *uint32 `msg:"packetCnt" json:"packetCnt"`
 }
 
 func NewDlDataRes(
@@ -61,9 +61,9 @@ func (m *DlDataRes) GetCommand() structs.Command {
 //
 // Service Center -> Basestation
 type DlDataResRsp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewDlDataResRsp(opId int64) DlDataResRsp {
@@ -85,9 +85,9 @@ func (m *DlDataResRsp) GetCommand() structs.Command {
 //
 // Basestation -> Service Center
 type DlDataResCmp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewDlDataResCmp(opId int64) DlDataResCmp {

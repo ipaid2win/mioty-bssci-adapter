@@ -15,41 +15,41 @@ import (
 //
 // Basestation -> Service Center
 type Att struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 	// End Point EUI64
-	EpEui common.EUI64 `msg:"epEui"`
+	EpEui common.EUI64 `msg:"epEui" json:"epEui"`
 	// Unix UTC time of reception, center of last subpacket, 64 bit, ns resolution
-	RxTime uint64 `msg:"rxTime"`
+	RxTime uint64 `msg:"rxTime" json:"rxTime"`
 	// Duration of the reception, center of first subpacket to center of last subpacket in ns, optional
-	RxDuration *uint64 `msg:"rxDuration,omitempty"`
+	RxDuration *uint64 `msg:"rxDuration,omitempty" json:"rxDuration,omitempty"`
 	// End Point attachment counter
-	AttachCnt uint32 `msg:"attachCnt"`
+	AttachCnt uint32 `msg:"attachCnt" json:"attachCnt"`
 	// Reception signal to noise ratio in dB
-	SNR float64 `msg:"snr"`
+	SNR float64 `msg:"snr" json:"snr"`
 	// Reception signal strength in dBm
-	RSSI float64 `msg:"rssi"`
+	RSSI float64 `msg:"rssi" json:"rssi"`
 	// AWGN equivalent reception SNR in dB, optional
-	EqSnr *float64 `msg:"eqSnr,omitempty"`
+	EqSnr *float64 `msg:"eqSnr,omitempty" json:"eqSnr,omitempty"`
 	// Name of the Mioty profile used for reception, i.e. eu1, optional
-	Profile *string `msg:"profile,omitempty"`
+	Profile *string `msg:"profile,omitempty" json:"profile,omitempty"`
 	// Subpackets object with reception info for every subpacket, optional
-	Subpackets *Subpackets `msg:"subpackets,omitempty"`
+	Subpackets *Subpackets `msg:"subpackets,omitempty" json:"subpackets,omitempty"`
 	// End Point nonce
-	Nonce [4]byte `msg:"nonce"`
+	Nonce [4]byte `msg:"nonce" json:"nonce"`
 	// End Point signature
-	Sign [4]byte `msg:"sign"`
+	Sign [4]byte `msg:"sign" json:"sign"`
 	// End Point short address, only if assigned by the Base Station
-	ShAddr *uint16 `msg:"shAddr,omitempty"`
+	ShAddr *uint16 `msg:"shAddr,omitempty" json:"shAddr,omitempty"`
 	// True if End Point uses dual channel mode
-	DualChan bool `msg:"dualChan"`
+	DualChan bool `msg:"dualChan" json:"dualChan"`
 	// True if End Point uses DL repetition
-	Repetition bool `msg:"repetition"`
+	Repetition bool `msg:"repetition" json:"repetition"`
 	// True if End Point uses wide carrier offset
-	WideCarrOff bool `msg:"wideCarrOff"`
+	WideCarrOff bool `msg:"wideCarrOff" json:"wideCarrOff"`
 	// True if End Point uses long DL interblock distance
-	LongBlkDist bool `msg:"longBlkDist"`
+	LongBlkDist bool `msg:"longBlkDist" json:"longBlkDist"`
 }
 
 func NewAtt(
@@ -123,13 +123,13 @@ func (m *Att) GetTsUnbRxInformation() UplinkMetadata {
 //
 // Service Center -> Basestation
 type AttRsp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 	// End Point network session key
-	NwkSessionKey [16]byte `msg:"nwkSessionKey"`
+	NwkSessionKey [16]byte `msg:"nwkSessionKey" json:"nwkSessionKey"`
 	// End Point short address, only if not assigned by the Base Station
-	ShAddr *uint16 `msg:"shAddr,omitempty"`
+	ShAddr *uint16 `msg:"shAddr,omitempty" json:"shAddr,omitempty"`
 }
 
 func NewAttRsp(opId int64, nwkSessionKey [16]byte, shAddr *uint16) AttRsp {
@@ -154,9 +154,9 @@ func (m *AttRsp) GetCommand() structs.Command {
 //
 // Basestation -> Service Center
 type AttCmp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operationF
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewAttCmp(opId int64) AttCmp {

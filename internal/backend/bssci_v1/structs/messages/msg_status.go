@@ -14,9 +14,9 @@ import (
 //
 // Service Center -> Basestation
 type Status struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewStatus(opId int64) Status {
@@ -35,27 +35,27 @@ func (m *Status) GetCommand() structs.Command {
 //
 // Basestation -> Service Center
 type StatusRsp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 	// Status code, using POSIX error numbers, 0 for ok
-	Code uint32 `msg:"code"`
+	Code uint32 `msg:"code" json:"code"`
 	// Status message
-	Message string `msg:"message"`
+	Message string `msg:"message" json:"message"`
 	// Unix UTC system time, 64 bit, ns resolution
-	Time uint64 `msg:"time"`
+	Time uint64 `msg:"time" json:"time"`
 	// Fraction of TX time, sliding window over one hour
-	DutyCycle float32 `msg:"dutyCycle"`
+	DutyCycle float32 `msg:"dutyCycle" json:"dutyCycle"`
 	// Geographic location [Latitude, Longitude, Altitude], optional
-	GeoLocation *GeoLocation `msg:"geoLocation,omitempty"`
+	GeoLocation *GeoLocation `msg:"geoLocation,omitempty" json:"geoLocation,omitempty"`
 	// System uptime in seconds, optional
-	Uptime *uint64 `msg:"uptime,omitempty"`
+	Uptime *uint64 `msg:"uptime,omitempty" json:"uptime,omitempty"`
 	// System temperature in degree Celsius, optional
-	Temp *float64 `msg:"temp,omitempty"`
+	Temp *float64 `msg:"temp,omitempty" json:"temp,omitempty"`
 	// CPU utilization, normalized to 1.0 for all cores, optional
-	CpuLoad *float64 `msg:"cpuLoad,omitempty"`
+	CpuLoad *float64 `msg:"cpuLoad,omitempty" json:"cpuLoad,omitempty"`
 	// Memory utilization, normalized to 1.0, optional
-	MemLoad *float64 `msg:"memLoad,omitempty"`
+	MemLoad *float64 `msg:"memLoad,omitempty" json:"memLoad,omitempty"`
 }
 
 func NewStatusRsp(opId int64, code uint32, message string, time uint64, dutyCycle float32, geoLocation *GeoLocation, uptime *uint64, temp *float64, cpuLoad *float64, memLoad *float64) StatusRsp {
@@ -86,9 +86,9 @@ func (m *StatusRsp) GetCommand() structs.Command {
 //
 // Service Center -> Basestation
 type StatusCmp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewStatusCmp(opId int64) StatusCmp {

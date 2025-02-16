@@ -15,19 +15,19 @@ import (
 //
 // Basestation -> Service Center
 type DlRxStat struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 	// End Point EUI64
-	EpEui common.EUI64 `msg:"epEui"`
+	EpEui common.EUI64 `msg:"epEui" json:"epEui"`
 	// Unix UTC time of reception, center of last subpacket, 64 bit, ns resolution
-	RxTime uint64 `msg:"rxTime"`
+	RxTime uint64 `msg:"rxTime" json:"rxTime"`
 	// End Point packet counter, only if result is “sent”
-	PacketCnt *uint32 `msg:"packetCnt"`
+	PacketCnt *uint32 `msg:"packetCnt" json:"packetCnt"`
 	// End Point DL reception signal to noise ratio in dB
-	DlRxSnr float64 `msg:"dlRxSnr"`
+	DlRxSnr float64 `msg:"dlRxSnr" json:"dlRxSnr"`
 	// End Point DL reception signal strength in dBm
-	DlRxRssi float64 `msg:"dlRxRssi"`
+	DlRxRssi float64 `msg:"dlRxRssi" json:"dlRxRssi"`
 }
 
 func NewDlRxStat(
@@ -63,9 +63,9 @@ func (m *DlRxStat) GetCommand() structs.Command {
 //
 // Service Center -> Basestation
 type DlRxStatRsp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewDlRxStatRsp(opId int64) DlRxStatRsp {
@@ -87,9 +87,9 @@ func (m *DlRxStatRsp) GetCommand() structs.Command {
 //
 // Basestation -> Service Center
 type DlRxStatCmp struct {
-	Command structs.Command `msg:"command"`
+	Command structs.Command `msg:"command" json:"command"`
 	// ID of the operation
-	OpId int64 `msg:"opId"`
+	OpId int64 `msg:"opId" json:"opId"`
 }
 
 func NewDlRxStatCmp(opId int64) DlRxStatCmp {
