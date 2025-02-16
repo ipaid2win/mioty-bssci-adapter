@@ -217,6 +217,7 @@ func (b *Backend) initBasestation(ctx context.Context, con messages.Con, conn ne
 	defer func() {
 		done <- struct{}{}
 		b.basestations.remove(eui)
+		disconnectCounter(eui.String()).Inc()
 		logger.Info().Msg("basestation disconnected")
 	}()
 
@@ -238,6 +239,7 @@ func (b *Backend) initBasestation(ctx context.Context, con messages.Con, conn ne
 					bsConnection.conn.Close()
 					return
 				}
+				pingPongCounter("server", eui.String())
 				logger.Info().Msg("sent scheduled ping message")
 			case <-statusTicker.C:
 				opId := bsConnection.DecrementOpId()
@@ -256,7 +258,7 @@ func (b *Backend) initBasestation(ctx context.Context, con messages.Con, conn ne
 		}
 	}()
 
-	connectCounter().Inc()
+	connectCounter(eui.String()).Inc()
 	//send ConRsp
 	bsConnection.Write(&conRsp, b.writeTimeout)
 
@@ -289,6 +291,8 @@ func (b *Backend) handleBasestation(ctx context.Context, eui common.EUI64, conn 
 		} else {
 			logger.Info().Msg("received message")
 		}
+
+		messageReceiveCounter(eui.String(), string(cmd))
 
 		// only match ClientMsg... messages
 		switch cmd {
@@ -327,7 +331,6 @@ func (b *Backend) handleBasestation(ctx context.Context, eui common.EUI64, conn 
 				logger.Error().Stack().Err(err).Msg("unmarshal msgp error")
 				continue
 			}
-
 			response = b.handleUlDataMessage(ctx, eui, msg)
 		case structs.ClientMsgDlDataRes:
 			// handle downlink data result response
@@ -338,7 +341,6 @@ func (b *Backend) handleBasestation(ctx context.Context, eui common.EUI64, conn 
 				continue
 			}
 			response = b.handleDlDataResMessage(ctx, msg, eui)
-
 		case structs.ClientMsgDlRxStat:
 			// handle downlink rx status data message
 			var msg messages.DlRxStat
@@ -359,6 +361,7 @@ func (b *Backend) handleBasestation(ctx context.Context, eui common.EUI64, conn 
 			response = b.handleStatusRspMessage(ctx, eui, msg)
 		case structs.ClientMsgPing:
 			// handle ping message
+			pingPongCounter("client", eui.String())
 			defaultResponse := messages.NewPingRsp(opId)
 			response = &defaultResponse
 		case structs.ClientMsgPingRsp:
@@ -416,7 +419,6 @@ func (b *Backend) handleBasestation(ctx context.Context, eui common.EUI64, conn 
 			continue
 		default:
 			logger.Warn().Msg("received unsupported command")
-
 			// maybe send Error Message?
 			continue
 		}
@@ -428,6 +430,7 @@ func (b *Backend) handleBasestation(ctx context.Context, eui common.EUI64, conn 
 				// terminate this connection
 				return
 			}
+			messagSendCounter(eui.String(), string(response.GetCommand()))
 			logger.Info().Str("response", string(response.GetCommand())).Msg("sent response")
 		}
 	}
@@ -436,8 +439,6 @@ func (b *Backend) handleBasestation(ctx context.Context, eui common.EUI64, conn 
 func (b *Backend) handleDlDataResMessage(ctx context.Context, msg messages.DlDataRes, eui common.EUI64) messages.Message {
 	b.RLock()
 	defer b.RUnlock()
-
-
 
 	// txack, err := msg.IntoProto(eui)
 	// if err != nil {
