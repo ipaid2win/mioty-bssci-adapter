@@ -44,3 +44,4 @@ go.work.sum
 # codegen
 *_gen.go
 *_gen_test.go
+*.pb.go

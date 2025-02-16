@@ -22,7 +22,7 @@ type Det struct {
 	EpEui common.EUI64 `msg:"epEui"`
 	// Unix UTC time of reception, center of last subpacket, 64 bit, ns resolution
 	RxTime uint64 `msg:"rxTime"`
-	// Duration or the reception, center of first subpacket to center of last subpacket in ns, optional
+	// Duration of the reception, center of first subpacket to center of last subpacket in ns, optional
 	RxDuration *uint64 `msg:"rxDuration,omitempty"`
 	// End Point packet counter
 	PacketCnt uint32 `msg:"packetCnt"`
@@ -88,8 +88,8 @@ func (m *Det) GetEndpointEui() common.EUI64 {
 }
 
 // implements UplinkMessage.GetTsUnbRxInformation()
-func (m *Det) GetTsUnbRxInformation() TsUnbInformation {
-	return TsUnbInformation{
+func (m *Det) GetTsUnbRxInformation() UplinkMetadata {
+	return UplinkMetadata{
 		RxTime:     m.RxTime,
 		RxDuration: m.RxDuration,
 		PacketCnt:  m.PacketCnt,
@@ -100,8 +100,6 @@ func (m *Det) GetTsUnbRxInformation() TsUnbInformation {
 		Subpackets: m.Subpackets,
 	}
 }
-
-
 
 // Detach response
 //

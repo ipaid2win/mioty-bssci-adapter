@@ -22,7 +22,7 @@ type Att struct {
 	EpEui common.EUI64 `msg:"epEui"`
 	// Unix UTC time of reception, center of last subpacket, 64 bit, ns resolution
 	RxTime uint64 `msg:"rxTime"`
-	// Duration or the reception, center of first subpacket to center of last subpacket in ns, optional
+	// Duration of the reception, center of first subpacket to center of last subpacket in ns, optional
 	RxDuration *uint64 `msg:"rxDuration,omitempty"`
 	// End Point attachment counter
 	AttachCnt uint32 `msg:"attachCnt"`
@@ -106,8 +106,8 @@ func (m *Att) GetEndpointEui() common.EUI64 {
 }
 
 // implements UplinkMessage.GetTsUnbRxInformation()
-func (m *Att) GetTsUnbRxInformation() TsUnbInformation {
-	return TsUnbInformation{
+func (m *Att) GetTsUnbRxInformation() UplinkMetadata {
+	return UplinkMetadata{
 		RxTime:     m.RxTime,
 		RxDuration: m.RxDuration,
 		PacketCnt:  0,
@@ -118,7 +118,6 @@ func (m *Att) GetTsUnbRxInformation() TsUnbInformation {
 		Subpackets: m.Subpackets,
 	}
 }
-
 
 // Attach response
 //
