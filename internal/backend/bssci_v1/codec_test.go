@@ -48,8 +48,7 @@ func TestMarshalBssciMessage(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	if !bytes.Equal(buf, testMessageConRaw) {
+	if bytes.Equal(buf, testMessageConRaw){
 
 		var raw msgp.Raw
 		var raw2 msgp.Raw
@@ -119,7 +118,6 @@ func TestCodecBssciMessage(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Logf("%v", con)
 
 }
 

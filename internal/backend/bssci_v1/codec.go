@@ -148,7 +148,7 @@ func prepareBssciMessage(length int) (buf []byte, err error) {
 	return
 }
 
-func getBssciMessageLengthFromHeader(buf []byte) (l int, err error) {
+func getBssciMessageLengthFromHeader(buf []byte) (l int32, err error) {
 
 	if len(buf) < bssciHeaderSize {
 		err = errors.New("message header error: invalid header size")
