@@ -10,7 +10,7 @@ option go_package = "mioty-bssci-adapter/internal/api/cmd";
 
 message PropagateEndnode{
     // Endnode EUI.
-    string endnode_eui = 1;
+    bytes endnode_eui = 1;
     // Command.
     oneof command {
         // Server attachment

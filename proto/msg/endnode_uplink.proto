@@ -12,9 +12,9 @@ option go_package = "mioty-bssci-adapter/internal/api/msg";
 
 message EndnodeUplink {
     // Basestation EUI.
-    string bs_eui = 1;
+    bytes bs_eui = 1;
     // Endnode EUI.
-    string endnode_eui = 2;
+    bytes endnode_eui = 2;
     // Metadata.
     EndnodeUplinkMetadata meta = 3;
     // Message.
