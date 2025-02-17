@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package msg;
+
+import "google/protobuf/timestamp.proto";
+
+
+option go_package = "mioty-bssci-adapter/internal/api/msg";
+
+
+message BasestationStatus {
+    // Basestation EUI.
+    string bs_eui = 1;
+    // Status code, using POSIX error numbers, 0 for ok
+    uint32 status_code = 2;
+    // Status message
+    uint32 status_msg = 3;
+    // Unix UTC system time
+    google.protobuf.Timestamp ts = 4;
+    // Fraction of TX time, sliding window over one hour
+    float duty_cycle = 5;
+    // Geographic location [Latitude, Longitude, Altitude], optional
+    optional GeoLocation geo_location = 6;
+    // System uptime in seconds, optional
+    optional uint64 uptime = 7;
+    // System temperature in degree Celsius, optional
+    optional float temp = 8;
+    // CPU utilization, normalized to 1.0 for all cores, optional
+    optional float cpu = 9;
+    // Memory utilization, normalized to 1.0, optional
+    optional float memory = 10;
+}
+
+
+message GeoLocation {
+    float lat = 1;
+    float lon = 2;
+    float alt = 3;
+}

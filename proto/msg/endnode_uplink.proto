@@ -11,8 +11,8 @@ option go_package = "mioty-bssci-adapter/internal/api/msg";
 // option features.(pb.go).api_level = API_OPAQUE;
 
 message EndnodeUplink {
-    // Gateway EUI.
-    string gateway_eui = 1;
+    // Basestation EUI.
+    string bs_eui = 1;
     // Endnode EUI.
     string endnode_eui = 2;
     // Metadata.
@@ -29,10 +29,8 @@ message EndnodeUplink {
     }
 }
 
-
-
 message EndnodeUplinkMetadata {
-    // Gateway RX time.
+    // Basestation RX time.
     google.protobuf.Timestamp rx_time = 1;
     // Duration of the reception. (Optional)
     optional google.protobuf.Duration rx_duration = 2;
@@ -53,17 +51,17 @@ message EndnodeUplinkMetadata {
 }
 
 message EndnodeUplinkSubpacket {
-  // Subpacket signal to noise ratio in dB.
-  int32 snr = 1;
+    // Subpacket signal to noise ratio in dB.
+    int32 snr = 1;
 
-  // Subpacket signal strength in dBm.
-  int32 rssi = 2;
+    // Subpacket signal strength in dBm.
+    int32 rssi = 2;
 
-  // Subpacket frequencies in Hz.
-  int32 frequency = 3;
+    // Subpacket frequencies in Hz.
+    int32 frequency = 3;
 
-  // Subpacket phases in degree +-180. (Optional)
-  optional int32 phase = 4;
+    // Subpacket phases in degree +-180. (Optional)
+    optional int32 phase = 4;
 }
 
 message EndnodeAttMessage {

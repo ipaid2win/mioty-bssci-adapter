@@ -17,7 +17,17 @@ message PropagateEndnode{
         PropagateAttach prpAtt = 2;
         // Server detachment
         PropagateDetach prpDet = 3;
-    }
+    };
+    // Whitelist of basestation EUIs.
+    // Propagate message will be send to all included EUIs. 
+    // 
+    // Empty whitelist and blacklist is broadcast.
+    repeated string bs_whitelist = 4;
+    // Blacklist of basestation EUIs.
+    // Propagate message will be send to all excluded EUIs. 
+    //
+    // Empty whitelist and blacklist is broadcast.
+    repeated string bs_blacklist = 5;
 }
 
 

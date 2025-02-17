@@ -11,6 +11,7 @@ requirements:
 
 msg:
 	protoc ${PROTOC_ARGS} msg/endnode_uplink.proto
+	protoc ${PROTOC_ARGS} msg/basestation_status.proto
 
 cmd:
 	protoc ${PROTOC_ARGS} cmd/propagate_endnode.proto

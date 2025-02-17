@@ -17,8 +17,10 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
+	"mioty-bssci-adapter/internal/api/msg"
 	"mioty-bssci-adapter/internal/backend/bssci_v1/structs"
 	"mioty-bssci-adapter/internal/backend/bssci_v1/structs/messages"
+	"mioty-bssci-adapter/internal/backend/events"
 	"mioty-bssci-adapter/internal/common"
 	"mioty-bssci-adapter/internal/config"
 )
@@ -40,6 +42,9 @@ type Backend struct {
 	pingInterval  time.Duration
 	readTimeout   time.Duration
 	writeTimeout  time.Duration
+
+	basestationStatusHandler func(*msg.BasestationStatus)
+	endnodeUplinkHandler     func(*msg.EndnodeUplink)
 
 	// downlinkTxAckFunc           func(*gw.DownlinkTxAck)
 	// uplinkFrameFunc             func(*gw.UplinkFrame)
@@ -103,6 +108,20 @@ func NewBackend(conf config.Config) (backend *Backend, err error) {
 	return
 }
 
+// Handler for Subscribe events.
+func (b *Backend) SetSubscribeEventHandler(f func(events.Subscribe)) {
+	b.basestations.subscribeEventHandler = f
+}
+
+// Handler for basestation status messages
+func (b *Backend) SetBasestationStatusHandler(f func(*msg.BasestationStatus)) {
+	b.basestationStatusHandler = f
+}
+
+// Handler for basestation status messages
+func (b *Backend) SetEndnodeUplinkHandler(f func(*msg.EndnodeUplink)) {
+	b.endnodeUplinkHandler = f
+}
 
 // Stop stops the backend.
 func (b *Backend) GetBssciVersion() string {
