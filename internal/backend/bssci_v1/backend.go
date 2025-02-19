@@ -144,8 +144,8 @@ func (b *Backend) Start() error {
 
 			if err != nil {
 				log.Error().Stack().Err(err).Msg("tls accept failed")
-
 			}
+
 			logger := log.With().Str("remote", conn.RemoteAddr().String()).Logger()
 			logger.Info().Msg("accepted new tls connection")
 
@@ -516,6 +516,15 @@ func (b *Backend) handleConMessage(ctx context.Context, conn *connection, eui co
 		logger.Warn().Msg("Failed to resume current session")
 	}
 	return &conRsp
+}
+
+func (b *Backend) handleEndnodeUplink(ctx context.Context, eui common.EUI64, msg messages.UplinkMessage) messages.Message {
+	// TODO response builder
+	// TODO do something with the data
+	// send to broker and get session key
+	// propagate to all basestations
+
+	return nil
 }
 
 func (b *Backend) handleAttMessage(ctx context.Context, eui common.EUI64, msg messages.Att) messages.Message {

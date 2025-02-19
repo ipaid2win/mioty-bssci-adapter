@@ -1,6 +1,8 @@
 package messages
 
 import (
+	"encoding/binary"
+	"mioty-bssci-adapter/internal/api/msg"
 	"mioty-bssci-adapter/internal/backend/bssci_v1/structs"
 	"mioty-bssci-adapter/internal/common"
 )
@@ -105,8 +107,8 @@ func (m *Att) GetEndpointEui() common.EUI64 {
 	return m.EpEui
 }
 
-// implements UplinkMessage.GetTsUnbRxInformation()
-func (m *Att) GetTsUnbRxInformation() UplinkMetadata {
+// implements UplinkMessage.GetUplinkMetadata()
+func (m *Att) GetUplinkMetadata() UplinkMetadata {
 	return UplinkMetadata{
 		RxTime:     m.RxTime,
 		RxDuration: m.RxDuration,
@@ -117,6 +119,50 @@ func (m *Att) GetTsUnbRxInformation() UplinkMetadata {
 		EqSnr:      m.EqSnr,
 		Subpackets: m.Subpackets,
 	}
+}
+
+// implements UplinkMessage.IntoProto()
+func (m *Att) IntoProto(bsEui common.EUI64) (*msg.EndnodeUplink, error) {
+
+	var message msg.EndnodeUplink
+
+	bsEuiB, err := bsEui.MarshalBinary()
+	if err != nil {
+		return &message, err
+	}
+
+	epEuiB, err := m.EpEui.MarshalBinary()
+	if err != nil {
+		return &message, err
+	}
+
+	nonce := binary.LittleEndian.Uint32(m.Nonce[:])
+
+	sign := binary.LittleEndian.Uint32(m.Sign[:])
+
+	shAddr := uint32(*m.ShAddr)
+
+	message = msg.EndnodeUplink{
+		BsEui:      bsEuiB,
+		EndnodeEui: epEuiB,
+		Meta:       &msg.EndnodeUplinkMetadata{},
+		Message: &msg.EndnodeUplink_Att{
+			Att: &msg.EndnodeAttMessage{
+				OpId:          m.OpId,
+				AttachmentCnt: m.AttachCnt,
+				Nonce:         nonce,
+				Sign:          sign,
+				ShAddr:        &shAddr,
+				DualChannel:   m.DualChan,
+				Repetition:    m.Repetition,
+				WideCarrOff:   m.WideCarrOff,
+				LongBlkDist:   m.LongBlkDist,
+			},
+		},
+	}
+
+	return &message, nil
+
 }
 
 // Attach response

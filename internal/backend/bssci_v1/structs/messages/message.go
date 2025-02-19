@@ -27,7 +27,7 @@ type UplinkMessage interface {
 	Message
 	GetEndpointEui() common.EUI64
 	GetUplinkMetadata() UplinkMetadata
-	IntoProto() msg.EndnodeUplink
+	IntoProto(bsEui common.EUI64) (*msg.EndnodeUplink, error)
 }
 
 type UplinkMetadata struct {
@@ -45,6 +45,5 @@ type PropagateMessage interface {
 	Message
 	GetEndpointEui() common.EUI64
 	IntoProto() cmd.PropagateEndnode
-
 }
 

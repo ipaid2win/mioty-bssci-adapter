@@ -1,6 +1,8 @@
 package messages
 
 import (
+	"encoding/binary"
+	"mioty-bssci-adapter/internal/api/msg"
 	"mioty-bssci-adapter/internal/backend/bssci_v1/structs"
 	"mioty-bssci-adapter/internal/common"
 )
@@ -87,8 +89,8 @@ func (m *Det) GetEndpointEui() common.EUI64 {
 	return m.EpEui
 }
 
-// implements UplinkMessage.GetTsUnbRxInformation()
-func (m *Det) GetTsUnbRxInformation() UplinkMetadata {
+// implements UplinkMessage.GetUplinkMetadata()
+func (m *Det) GetUplinkMetadata() UplinkMetadata {
 	return UplinkMetadata{
 		RxTime:     m.RxTime,
 		RxDuration: m.RxDuration,
@@ -99,6 +101,37 @@ func (m *Det) GetTsUnbRxInformation() UplinkMetadata {
 		EqSnr:      m.EqSnr,
 		Subpackets: m.Subpackets,
 	}
+}
+
+// implements UplinkMessage.IntoProto()
+func (m *Det) IntoProto(bsEui common.EUI64) (*msg.EndnodeUplink, error) {
+
+	var message msg.EndnodeUplink
+
+	bsEuiB, err := bsEui.MarshalBinary()
+	if err != nil {
+		return &message, err
+	}
+
+	epEuiB, err := m.EpEui.MarshalBinary()
+	if err != nil {
+		return &message, err
+	}
+
+	sign := binary.LittleEndian.Uint32(m.Sign[:])
+
+	message = msg.EndnodeUplink{
+		BsEui:      bsEuiB,
+		EndnodeEui: epEuiB,
+		Meta:       &msg.EndnodeUplinkMetadata{},
+		Message: &msg.EndnodeUplink_Det{
+			Det: &msg.EndnodeDetMessage{
+				OpId: m.OpId,
+				Sign: sign,
+			},
+		},
+	}
+	return &message, nil
 }
 
 // Detach response
