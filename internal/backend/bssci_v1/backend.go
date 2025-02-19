@@ -479,16 +479,13 @@ func (b *Backend) handleEndnodeUplink(ctx context.Context, eui common.EUI64, msg
 	logger := zerolog.Ctx(ctx)
 
 	if b.endnodeUplinkHandler != nil {
-		data, err := msg.IntoProto(eui)
-		if err != nil {
-			logger.Error().Stack().Err(err).Msg("failed to convert endnode uplink to protobuf message")
-		} else {
-			b.endnodeUplinkHandler(data)
-			return nil
-		}
-	} else {
-		logger.Warn().Msg("endnodeUplinkHandler not set")
+		data := msg.IntoProto(eui)
+		b.endnodeUplinkHandler(data)
+		return nil
+
 	}
+
+	logger.Warn().Msg("endnodeUplinkHandler not set")
 	response := messages.NewBssciError(msg.GetOpId(), 5, "internal server error")
 	return &response
 }
@@ -512,21 +509,17 @@ func (b *Backend) handleUlDataMessage(ctx context.Context, eui common.EUI64, msg
 	return error_response
 }
 
-
 func (b *Backend) handleBasestationStatus(ctx context.Context, eui common.EUI64, msg messages.BasestationStatusMessage) messages.Message {
 	logger := zerolog.Ctx(ctx)
 
 	if b.endnodeUplinkHandler != nil {
-		data, err := msg.IntoProto(eui)
-		if err != nil {
-			logger.Error().Stack().Err(err).Msg("failed to convert basetations status to protobuf message")
-		} else {
-			b.basestationStatusHandler(data)
-			return nil
-		}
-	} else {
-		logger.Warn().Msg("basestationStatusHandler not set")
+		data := msg.IntoProto(eui)
+		b.basestationStatusHandler(data)
+		return nil
+
 	}
+
+	logger.Warn().Msg("basestationStatusHandler not set")
 	response := messages.NewBssciError(msg.GetOpId(), 5, "internal server error")
 	return &response
 
