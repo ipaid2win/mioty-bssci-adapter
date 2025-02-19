@@ -14,7 +14,7 @@ message BasestationStatus {
     // Status code, using POSIX error numbers, 0 for ok
     uint32 status_code = 2;
     // Status message
-    uint32 status_msg = 3;
+    string status_msg = 3;
     // Unix UTC system time
     google.protobuf.Timestamp ts = 4;
     // Fraction of TX time, sliding window over one hour
@@ -24,11 +24,11 @@ message BasestationStatus {
     // System uptime in seconds, optional
     optional uint64 uptime = 7;
     // System temperature in degree Celsius, optional
-    optional float temp = 8;
+    optional double temp = 8;
     // CPU utilization, normalized to 1.0 for all cores, optional
-    optional float cpu = 9;
+    optional double cpu = 9;
     // Memory utilization, normalized to 1.0, optional
-    optional float memory = 10;
+    optional double memory = 10;
 }
 
 

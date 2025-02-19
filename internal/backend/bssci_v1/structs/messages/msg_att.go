@@ -142,10 +142,12 @@ func (m *Att) IntoProto(bsEui common.EUI64) (*msg.EndnodeUplink, error) {
 
 	shAddr := uint32(*m.ShAddr)
 
+	metadata := m.GetUplinkMetadata()
+
 	message = msg.EndnodeUplink{
 		BsEui:      bsEuiB,
 		EndnodeEui: epEuiB,
-		Meta:       &msg.EndnodeUplinkMetadata{},
+		Meta:       metadata.IntoProto(),
 		Message: &msg.EndnodeUplink_Att{
 			Att: &msg.EndnodeAttMessage{
 				OpId:          m.OpId,

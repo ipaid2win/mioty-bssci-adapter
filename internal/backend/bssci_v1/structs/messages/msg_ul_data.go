@@ -139,14 +139,17 @@ func (m *UlData) IntoProto(bsEui common.EUI64) (*msg.EndnodeUplink, error) {
 		format = uint32(*m.Format)
 	}
 
+	metadata := m.GetUplinkMetadata()
+
 	message = msg.EndnodeUplink{
 		BsEui:      bsEuiB,
 		EndnodeEui: epEuiB,
-		Meta:       &msg.EndnodeUplinkMetadata{},
+		Meta:       metadata.IntoProto(),
 		Message: &msg.EndnodeUplink_UlData{
 			UlData: &msg.EndnodeUlDataMessage{
 				Data:   m.UserData,
 				Format: format,
+				Mode:   m.Mode,
 			},
 		},
 	}

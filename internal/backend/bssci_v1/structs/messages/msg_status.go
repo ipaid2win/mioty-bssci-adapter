@@ -1,7 +1,11 @@
 package messages
 
 import (
+	"mioty-bssci-adapter/internal/api/msg"
 	"mioty-bssci-adapter/internal/backend/bssci_v1/structs"
+	"mioty-bssci-adapter/internal/common"
+
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 //go:generate msgp
@@ -80,6 +84,36 @@ func (m *StatusRsp) GetOpId() int64 {
 
 func (m *StatusRsp) GetCommand() structs.Command {
 	return structs.MsgStatusRsp
+}
+
+// implements BasestationStatusMessage.IntoProto()
+func (m *StatusRsp) IntoProto(bsEui common.EUI64) (*msg.BasestationStatus, error) {
+
+	var message msg.BasestationStatus
+
+	bsEuiB, err := bsEui.MarshalBinary()
+	if err != nil {
+		return &message, err
+	}
+
+	ts := timestamppb.Timestamp{
+		Seconds: int64(m.Time / 1000),
+		Nanos:   int32(m.Time % 1000),
+	}
+
+	message = msg.BasestationStatus{
+		BsEui:       bsEuiB,
+		StatusCode:  m.Code,
+		StatusMsg:   m.Message,
+		Ts:          &ts,
+		DutyCycle:   m.DutyCycle,
+		GeoLocation: &msg.GeoLocation{},
+		Uptime:      m.Uptime,
+		Temp:        m.Temp,
+		Cpu:         m.CpuLoad,
+		Memory:      m.MemLoad,
+	}
+	return &message, nil
 }
 
 // Status complete

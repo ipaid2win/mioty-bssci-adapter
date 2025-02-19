@@ -38,16 +38,14 @@ message EndnodeUplinkMetadata {
     uint32 packet_cnt = 3;
     // Profile. (Optional)
     optional string profile = 4;
-    // mioty Mode. (Optional)
-    optional string mode = 5;
     // RSSI.
-    float rssi = 6;
+    double rssi = 5;
     // SNR.
-    float snr = 7;
+    double snr = 6;
     // AWGN equivalent reception SNR. (Optional)
-    optional float eq_snr = 8;
+    optional double eq_snr = 7;
     // Reception info for every subpacket. (Optional)
-    repeated EndnodeUplinkSubpacket subpacket_info = 9;
+    repeated EndnodeUplinkSubpacket subpacket_info = 8;
 }
 
 message EndnodeUplinkSubpacket {
@@ -105,4 +103,7 @@ message EndnodeUlDataMessage {
     bytes data = 1;
     // MPF header byte, 1 byte
     uint32 format = 2;
+    // mioty Mode. (Optional)
+    optional string mode = 3;
+
 }

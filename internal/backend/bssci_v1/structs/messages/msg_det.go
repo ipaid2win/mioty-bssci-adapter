@@ -120,10 +120,12 @@ func (m *Det) IntoProto(bsEui common.EUI64) (*msg.EndnodeUplink, error) {
 
 	sign := binary.LittleEndian.Uint32(m.Sign[:])
 
+	metadata := m.GetUplinkMetadata()
+
 	message = msg.EndnodeUplink{
 		BsEui:      bsEuiB,
 		EndnodeEui: epEuiB,
-		Meta:       &msg.EndnodeUplinkMetadata{},
+		Meta:       metadata.IntoProto(),
 		Message: &msg.EndnodeUplink_Det{
 			Det: &msg.EndnodeDetMessage{
 				OpId: m.OpId,

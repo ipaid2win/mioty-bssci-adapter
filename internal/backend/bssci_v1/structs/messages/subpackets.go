@@ -1,5 +1,7 @@
 package messages
 
+import "mioty-bssci-adapter/internal/api/msg"
+
 //go:generate msgp
 
 // Subpackets
@@ -14,4 +16,33 @@ type Subpackets struct {
 	Frequency []int32 `msg:"frequency" json:"frequency"`
 	// Subpacket phases in degree +-180, optional
 	Phase []int32 `msg:"phase,omitempty" json:"phase,omitempty"`
+}
+
+func (subpackets *Subpackets) IntoProto() []*msg.EndnodeUplinkSubpacket {
+
+	pb := make([]*msg.EndnodeUplinkSubpacket, 0, len(subpackets.RSSI))
+
+	if subpackets.Phase == nil {
+		for i := 1; i < len(subpackets.RSSI); i++ {
+			proto := msg.EndnodeUplinkSubpacket{
+				Snr:       subpackets.SNR[i],
+				Rssi:      subpackets.RSSI[i],
+				Frequency: subpackets.Frequency[i],
+			}
+			pb = append(pb, &proto)
+		}
+
+	} else {
+		for i := 1; i < len(subpackets.RSSI); i++ {
+			proto := msg.EndnodeUplinkSubpacket{
+				Snr:       subpackets.SNR[i],
+				Rssi:      subpackets.RSSI[i],
+				Frequency: subpackets.Frequency[i],
+				Phase:     &subpackets.Phase[i],
+			}
+			pb = append(pb, &proto)
+		}
+	}
+
+	return pb
 }
