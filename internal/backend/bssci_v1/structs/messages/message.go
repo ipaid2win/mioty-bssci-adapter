@@ -26,7 +26,7 @@ type EndnodeUplinkMessage interface {
 	Message
 	GetEndpointEui() common.EUI64
 	GetUplinkMetadata() UplinkMetadata
-	IntoProto(bsEui common.EUI64) (*msg.EndnodeUplink, error)
+	IntoProto(bsEui common.EUI64) *msg.EndnodeUplink
 }
 
 type PropagateMessage interface {
@@ -37,5 +37,5 @@ type PropagateMessage interface {
 
 type BasestationStatusMessage interface {
 	Message
-	IntoProto(bsEui common.EUI64) (*msg.BasestationStatus, error)
+	IntoProto(bsEui common.EUI64) *msg.BasestationStatus
 }

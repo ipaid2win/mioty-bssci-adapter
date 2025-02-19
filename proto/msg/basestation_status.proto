@@ -9,8 +9,8 @@ option go_package = "mioty-bssci-adapter/internal/api/msg";
 
 
 message BasestationStatus {
-    // Basestation EUI.
-    bytes bs_eui = 1;
+    // Basestation EUI, 8 bytes little endian
+    uint64 bs_eui = 1;
     // Status code, using POSIX error numbers, 0 for ok
     uint32 status_code = 2;
     // Status message

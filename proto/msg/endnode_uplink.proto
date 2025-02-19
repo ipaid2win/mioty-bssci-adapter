@@ -11,10 +11,10 @@ option go_package = "mioty-bssci-adapter/internal/api/msg";
 // option features.(pb.go).api_level = API_OPAQUE;
 
 message EndnodeUplink {
-    // Basestation EUI.
-    bytes bs_eui = 1;
-    // Endnode EUI.
-    bytes endnode_eui = 2;
+    // Basestation EUI, 8 bytes little endian
+    uint64 bs_eui = 1;
+    // Endnode EUI, 8 bytes little endian
+    uint64 endnode_eui = 2;
     // Metadata.
     EndnodeUplinkMetadata meta = 3;
     // Message.

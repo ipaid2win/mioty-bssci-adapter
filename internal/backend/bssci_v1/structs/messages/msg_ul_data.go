@@ -1,6 +1,7 @@
 package messages
 
 import (
+	"encoding/binary"
 	"mioty-bssci-adapter/internal/api/msg"
 	"mioty-bssci-adapter/internal/backend/bssci_v1/structs"
 	"mioty-bssci-adapter/internal/common"
@@ -119,19 +120,13 @@ func (m *UlData) GetUplinkMetadata() UplinkMetadata {
 }
 
 // implements UplinkMessage.IntoProto()
-func (m *UlData) IntoProto(bsEui common.EUI64) (*msg.EndnodeUplink, error) {
+func (m *UlData) IntoProto(bsEui common.EUI64) *msg.EndnodeUplink {
 
 	var message msg.EndnodeUplink
 
-	bsEuiB, err := bsEui.MarshalBinary()
-	if err != nil {
-		return &message, err
-	}
+	bsEuiB := binary.LittleEndian.Uint64(bsEui[:])
+	epEuiB := binary.LittleEndian.Uint64(m.EpEui[:])
 
-	epEuiB, err := m.EpEui.MarshalBinary()
-	if err != nil {
-		return &message, err
-	}
 	var format uint32
 	if m.Format == nil {
 		format = 0
@@ -153,7 +148,7 @@ func (m *UlData) IntoProto(bsEui common.EUI64) (*msg.EndnodeUplink, error) {
 			},
 		},
 	}
-	return &message, nil
+	return &message
 }
 
 // Uplink data response

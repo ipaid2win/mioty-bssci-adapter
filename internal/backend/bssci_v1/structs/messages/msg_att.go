@@ -122,19 +122,12 @@ func (m *Att) GetUplinkMetadata() UplinkMetadata {
 }
 
 // implements UplinkMessage.IntoProto()
-func (m *Att) IntoProto(bsEui common.EUI64) (*msg.EndnodeUplink, error) {
+func (m *Att) IntoProto(bsEui common.EUI64) *msg.EndnodeUplink {
 
 	var message msg.EndnodeUplink
 
-	bsEuiB, err := bsEui.MarshalBinary()
-	if err != nil {
-		return &message, err
-	}
-
-	epEuiB, err := m.EpEui.MarshalBinary()
-	if err != nil {
-		return &message, err
-	}
+	bsEuiB := binary.LittleEndian.Uint64(bsEui[:])
+	epEuiB := binary.LittleEndian.Uint64(m.EpEui[:])
 
 	nonce := binary.LittleEndian.Uint32(m.Nonce[:])
 
@@ -162,9 +155,7 @@ func (m *Att) IntoProto(bsEui common.EUI64) (*msg.EndnodeUplink, error) {
 			},
 		},
 	}
-
-	return &message, nil
-
+	return &message
 }
 
 // Attach response

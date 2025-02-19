@@ -1,6 +1,7 @@
 package messages
 
 import (
+	"encoding/binary"
 	"mioty-bssci-adapter/internal/api/msg"
 	"mioty-bssci-adapter/internal/backend/bssci_v1/structs"
 	"mioty-bssci-adapter/internal/common"
@@ -87,14 +88,11 @@ func (m *StatusRsp) GetCommand() structs.Command {
 }
 
 // implements BasestationStatusMessage.IntoProto()
-func (m *StatusRsp) IntoProto(bsEui common.EUI64) (*msg.BasestationStatus, error) {
+func (m *StatusRsp) IntoProto(bsEui common.EUI64) *msg.BasestationStatus {
 
 	var message msg.BasestationStatus
 
-	bsEuiB, err := bsEui.MarshalBinary()
-	if err != nil {
-		return &message, err
-	}
+	bsEuiB := binary.LittleEndian.Uint64(bsEui[:])
 
 	ts := timestamppb.Timestamp{
 		Seconds: int64(m.Time / 1000),
@@ -102,18 +100,23 @@ func (m *StatusRsp) IntoProto(bsEui common.EUI64) (*msg.BasestationStatus, error
 	}
 
 	message = msg.BasestationStatus{
-		BsEui:       bsEuiB,
-		StatusCode:  m.Code,
-		StatusMsg:   m.Message,
-		Ts:          &ts,
-		DutyCycle:   m.DutyCycle,
-		GeoLocation: &msg.GeoLocation{},
-		Uptime:      m.Uptime,
-		Temp:        m.Temp,
-		Cpu:         m.CpuLoad,
-		Memory:      m.MemLoad,
+		BsEui:      bsEuiB,
+		StatusCode: m.Code,
+		StatusMsg:  m.Message,
+		Ts:         &ts,
+		DutyCycle:  m.DutyCycle,
+
+		Uptime: m.Uptime,
+		Temp:   m.Temp,
+		Cpu:    m.CpuLoad,
+		Memory: m.MemLoad,
 	}
-	return &message, nil
+
+	if m.GeoLocation != nil {
+		message.GeoLocation = m.GeoLocation.IntoProto()
+	}
+
+	return &message
 }
 
 // Status complete

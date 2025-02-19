@@ -20,32 +20,34 @@ type UplinkMetadata struct {
 
 func (m *UplinkMetadata) IntoProto() *msg.EndnodeUplinkMetadata {
 
-	rxTime := timestamppb.Timestamp{
-		Seconds: int64(m.RxTime / 1000),
-		Nanos:   int32(m.RxTime % 1000),
-	}
+	var message msg.EndnodeUplinkMetadata
 
-
-	message := msg.EndnodeUplinkMetadata{
-		RxTime:        &rxTime,
-		PacketCnt:     m.PacketCnt,
-		Profile:       m.Profile,
-		Rssi:          m.RSSI,
-		Snr:           m.SNR,
-		EqSnr:         m.EqSnr,
-		SubpacketInfo: m.Subpackets.IntoProto(),
-	}
-
-
-	if m.RxDuration != nil {
-		rxDuration := durationpb.Duration{
-			Seconds: int64(*m.RxDuration / 1000),
-			Nanos:   int32(*m.RxDuration % 1000),
+	if m != nil { 
+		rxTime := timestamppb.Timestamp{
+			Seconds: int64(m.RxTime / 1000),
+			Nanos:   int32(m.RxTime % 1000),
 		}
-		message.RxDuration = &rxDuration
+	
+		message = msg.EndnodeUplinkMetadata{
+			RxTime:        &rxTime,
+			PacketCnt:     m.PacketCnt,
+			Profile:       m.Profile,
+			Rssi:          m.RSSI,
+			Snr:           m.SNR,
+			EqSnr:         m.EqSnr,
+			SubpacketInfo: m.Subpackets.IntoProto(),
+		}
+	
+		if m.RxDuration != nil {
+			rxDuration := durationpb.Duration{
+				Seconds: int64(*m.RxDuration / 1000),
+				Nanos:   int32(*m.RxDuration % 1000),
+			}
+			message.RxDuration = &rxDuration
+		}
 	}
+
 
 
 	return &message
-
 }

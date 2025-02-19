@@ -104,19 +104,12 @@ func (m *Det) GetUplinkMetadata() UplinkMetadata {
 }
 
 // implements UplinkMessage.IntoProto()
-func (m *Det) IntoProto(bsEui common.EUI64) (*msg.EndnodeUplink, error) {
+func (m *Det) IntoProto(bsEui common.EUI64) *msg.EndnodeUplink {
 
 	var message msg.EndnodeUplink
 
-	bsEuiB, err := bsEui.MarshalBinary()
-	if err != nil {
-		return &message, err
-	}
-
-	epEuiB, err := m.EpEui.MarshalBinary()
-	if err != nil {
-		return &message, err
-	}
+	bsEuiB := binary.LittleEndian.Uint64(bsEui[:])
+	epEuiB := binary.LittleEndian.Uint64(m.EpEui[:])
 
 	sign := binary.LittleEndian.Uint32(m.Sign[:])
 
@@ -133,7 +126,7 @@ func (m *Det) IntoProto(bsEui common.EUI64) (*msg.EndnodeUplink, error) {
 			},
 		},
 	}
-	return &message, nil
+	return &message
 }
 
 // Detach response
