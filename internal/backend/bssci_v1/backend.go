@@ -333,6 +333,24 @@ func (b *Backend) handleBasestation(ctx context.Context, eui common.EUI64, conn 
 				break
 			}
 			response = b.handleAttMessage(ctx, eui, &msg)
+		case structs.ClientMsgDet:
+			// handle detach message
+			var msg messages.Det
+			_, err = msg.UnmarshalMsg(raw)
+			if err != nil {
+				response = log_and_notify_msgp_error(logger, err, opId)
+				break
+			}
+			response = b.handleDetMessage(ctx, eui, &msg)
+		case structs.ClientMsgUlData:
+			// handle uplink data message
+			var msg messages.UlData
+			_, err = msg.UnmarshalMsg(raw)
+			if err != nil {
+				response = log_and_notify_msgp_error(logger, err, opId)
+				break
+			}
+			response = b.handleUlDataMessage(ctx, eui, &msg)
 		case structs.ClientMsgDlDataRes:
 			// handle downlink data result response
 			var msg messages.DlDataRes
@@ -513,8 +531,6 @@ func (b *Backend) handleBasestationStatus(ctx context.Context, eui common.EUI64,
 	return &response
 
 }
-
-
 
 func (b *Backend) handleStatusRspMessage(ctx context.Context, eui common.EUI64, msg *messages.StatusRsp) messages.Message {
 	error_response := b.handleBasestationStatus(ctx, eui, msg)
