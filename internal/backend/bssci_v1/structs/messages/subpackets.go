@@ -15,34 +15,36 @@ type Subpackets struct {
 	// Subpacket frequencies in Hz
 	Frequency []int32 `msg:"frequency" json:"frequency"`
 	// Subpacket phases in degree +-180, optional
-	Phase []int32 `msg:"phase,omitempty" json:"phase,omitempty"`
+	Phase *[]int32 `msg:"phase,omitempty" json:"phase,omitempty"`
 }
 
 func (subpackets *Subpackets) IntoProto() []*msg.EndnodeUplinkSubpacket {
+	var pb []*msg.EndnodeUplinkSubpacket
+	if subpackets != nil {
+		pb = make([]*msg.EndnodeUplinkSubpacket, 0, len(subpackets.RSSI))
 
-	pb := make([]*msg.EndnodeUplinkSubpacket, 0, len(subpackets.RSSI))
-
-	if subpackets.Phase == nil {
-		for i := 1; i < len(subpackets.RSSI); i++ {
-			proto := msg.EndnodeUplinkSubpacket{
-				Snr:       subpackets.SNR[i],
-				Rssi:      subpackets.RSSI[i],
-				Frequency: subpackets.Frequency[i],
+		if subpackets.Phase == nil {
+			for i := 0; i < len(subpackets.RSSI); i++ {
+				proto := msg.EndnodeUplinkSubpacket{
+					Snr:       subpackets.SNR[i],
+					Rssi:      subpackets.RSSI[i],
+					Frequency: subpackets.Frequency[i],
+				}
+				pb = append(pb, &proto)
 			}
-			pb = append(pb, &proto)
-		}
+		} else {
+			phase := *subpackets.Phase
+			for i := 0; i < len(subpackets.RSSI); i++ {
 
-	} else {
-		for i := 1; i < len(subpackets.RSSI); i++ {
-			proto := msg.EndnodeUplinkSubpacket{
-				Snr:       subpackets.SNR[i],
-				Rssi:      subpackets.RSSI[i],
-				Frequency: subpackets.Frequency[i],
-				Phase:     &subpackets.Phase[i],
+				proto := msg.EndnodeUplinkSubpacket{
+					Snr:       subpackets.SNR[i],
+					Rssi:      subpackets.RSSI[i],
+					Frequency: subpackets.Frequency[i],
+					Phase:     &phase[i],
+				}
+				pb = append(pb, &proto)
 			}
-			pb = append(pb, &proto)
 		}
 	}
-
 	return pb
 }

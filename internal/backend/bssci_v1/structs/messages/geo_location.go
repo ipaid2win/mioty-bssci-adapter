@@ -21,7 +21,6 @@ func (m *GeoLocation) IntoProto() *msg.GeoLocation {
 			Alt: m.Alt,
 		}
 	}
-	
 
 	return &message
 }

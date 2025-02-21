@@ -40,7 +40,6 @@ type AttPrp struct {
 	LongBlkDist bool `msg:"longBlkDist" json:"longBlkDist"`
 }
 
-// TODO
 func NewAttPrp(opId int64, epEui common.EUI64, bidi bool, nwkSessionKey [16]byte, shAddr uint16, lastPacketCount uint32, dualChan bool, repetition bool, wideCarrOff bool, longBlkDist bool,
 ) AttPrp {
 	return AttPrp{Command: structs.MsgAttPrp, OpId: opId, EpEui: epEui, Bidi: bidi, NwkSessionKey: nwkSessionKey, ShAddr: shAddr, LastPacketCount: lastPacketCount, DualChan: dualChan, Repetition: repetition, WideCarrOff: wideCarrOff, LongBlkDist: longBlkDist}
