@@ -8,6 +8,7 @@ import (
 )
 
 //go:generate msgp
+//msgp:replace common.EUI64 with:[8]byte
 
 // Connect
 //
@@ -25,7 +26,7 @@ type Con struct {
 	// Requested protocol version, major.minor.patch
 	Version string `msg:"version" json:"version"`
 	// Base Station EUI64
-	BsEui int64 `msg:"bsEui" json:"bsEui"`
+	BsEui common.EUI64 `msg:"bsEui" json:"bsEui"`
 	// Vendor of the Base Station, optional
 	Vendor *string `msg:"vendor,omitempty" json:"vendor,omitempty"`
 	// Model of the Base Station, optional
@@ -57,7 +58,7 @@ func (m *Con) GetCommand() structs.Command {
 }
 
 func (m *Con) GetEui() common.EUI64 {
-	return common.EUI64FromInt(m.BsEui)
+	return m.BsEui
 }
 
 // Connect response
@@ -70,7 +71,7 @@ type ConRsp struct {
 	// Requested protocol version, major.minor.patch
 	Version string `msg:"version" json:"version"`
 	// Service Center EUI64
-	ScEui int64 `msg:"scEui" json:"scEui"`
+	ScEui common.EUI64 `msg:"scEui" json:"scEui"`
 	// Vendor of the Service Center, optional
 	Vendor *string `msg:"vendor,omitempty" json:"vendor,omitempty"`
 	// Model of the Service Center, optional
@@ -83,7 +84,7 @@ type ConRsp struct {
 	Info map[string]interface{} `msg:"info,omitempty" json:"info,omitempty"`
 	// True if a previous session is resumed
 	SnResume bool `msg:"snResume" json:"snResume"`
-	// Service Center session UUID, must match with previous connect to resume sessionF
+	// Service Center session UUID, must match with previous connect to resume session
 	SnScUuid structs.SessionUuid `msg:"snScUuid" json:"snScUuid"`
 }
 
@@ -96,7 +97,7 @@ func NewConRsp(opId int64, version string, snScUuid uuid.UUID) ConRsp {
 	return ConRsp{
 		Command:   structs.MsgConRsp,
 		OpId:      opId,
-		ScEui:     1,
+		ScEui:     common.EUI64{1, 1, 1, 1, 1, 1, 1, 1},
 		Version:   version,
 		SnScUuid:  session,
 		SnResume:  false,

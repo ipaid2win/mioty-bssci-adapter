@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"mioty-bssci-adapter/internal/backend/bssci_v1/structs"
 	"mioty-bssci-adapter/internal/backend/bssci_v1/structs/messages"
+	"mioty-bssci-adapter/internal/common"
 
 	"testing"
 
@@ -30,7 +31,7 @@ var (
 		Command: structs.MsgCon,
 		OpId:    0,
 		Version: "1.0.0",
-		BsEui:   2025300426188787,
+		BsEui:   common.EUI64{0x00, 0x07, 0x32, 0x00, 0x00, 0x77, 0x67, 0xF3},
 		Vendor:  &testVendor,
 		Model:   &testModel,
 		Name:    &testName,
