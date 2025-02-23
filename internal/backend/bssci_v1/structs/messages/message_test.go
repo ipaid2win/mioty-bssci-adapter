@@ -37,8 +37,11 @@ func (ts *TestMessageSuite) SetupSuite() {
 	testBsName := "M0007327767F3"
 	testScName := "Test Name"
 
-	testBsSessionUuid := structs.SessionUuid{-61, 114, -59, 33, -89, 120, 73, -101, -117, 78, 41, -57, -125, -73, 53, -35}
+
+	// equivalent to "f8d69e8a-a9dd-46d4-b975-11d654114a1f"
 	testScSessionUuid := structs.SessionUuid{-61, 114, -59, 33, -89, 120, 73, -101, -117, 78, 41, -57, -125, -73, 53, -35}
+	// equivalent to "c372c521-a778-499b-8b4e-29c783b735dd"
+	testBsSessionUuid := structs.SessionUuid{-8, -42, -98, -118, -87, -35, 70, -44, -71, 117, 17, -42, 84, 17, 74, 31}
 
 	testBsEui := common.EUI64{0x00, 0x07, 0x32, 0x00, 0x00, 0x77, 0x67, 0xF3}
 	testScEui := common.EUI64{0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01}
@@ -64,32 +67,15 @@ func (ts *TestMessageSuite) SetupSuite() {
 		},
 		wantErr: false,
 		json: `{
-    "command": "con",
-    "opId": 0,
-    "version": "1.0.0",
-    "bsEui": 2025300426188787,
-    "vendor": "Test Vendor",
-    "model": "Test Model",
-    "name": "M0007327767F3",
-    "bidi": true,
-    "snBsUuid": [
-        -61,
-        114,
-        -59,
-        33,
-        -89,
-        120,
-        73,
-        -101,
-        -117,
-        78,
-        41,
-        -57,
-        -125,
-        -73,
-        53,
-        -35
-    ]
+	"command": "con",
+	"opId": 0,
+	"version": "1.0.0",
+	"bsEui": "00073200007767f3",
+	"vendor": "Test Vendor",
+	"model": "Test Model",
+	"name": "M0007327767F3",
+	"bidi": true,
+	"snBsUuid": "f8d69e8a-a9dd-46d4-b975-11d654114a1f"
 }`,
 	}
 
@@ -111,31 +97,14 @@ func (ts *TestMessageSuite) SetupSuite() {
 		wantErr: false,
 		json: `{
 	"command": "conRsp",
-    "opId": 0,
-    "version": "1.0.0",
-    "scEui": 72340172838076670,
-    "vendor": "Test Vendor",
-    "model": "Test Model",
-    "name": "Test Name",
-    "snResume": false,
-    "snScUuid": [
-        -61,
-        114,
-        -59,
-        33,
-        -89,
-        120,
-        73,
-        -101,
-        -117,
-        78,
-        41,
-        -57,
-        -125,
-        -73,
-        53,
-        -35
-    ]
+	"opId": 0,
+	"version": "1.0.0",
+	"scEui": "0101010101010101",
+	"vendor": "Test Vendor",
+	"model": "Test Model",
+	"name": "Test Name",
+	"snResume": false,
+	"snScUuid": "c372c521-a778-499b-8b4e-29c783b735dd"
 }`,
 	}
 
@@ -267,13 +236,13 @@ func (ts *TestMessageSuite) SetupSuite() {
 		msg: &DetPrp{
 			Command: structs.MsgDetPrp,
 			OpId:    0,
-			EpEui: testEpEui,
+			EpEui:   testEpEui,
 		},
 		wantErr: false,
 		json: `{
 	"command": "detPrp",
 	"opId": 0,
-	"epEui": 72623859790382856
+	"epEui": "0102030405060708"
 }`,
 	}
 
