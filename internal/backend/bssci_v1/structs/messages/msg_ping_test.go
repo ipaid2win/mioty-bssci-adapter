@@ -15,10 +15,14 @@ func TestNewPing(t *testing.T) {
 		args args
 		want Ping
 	}{
-		{name: "ping", args: args{1}, want: Ping{
-			Command: structs.MsgPing,
-			OpId:    1,
-		}},
+		{
+			name: "ping",
+			args: args{1},
+			want: Ping{
+				Command: structs.MsgPing,
+				OpId:    1,
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -39,7 +43,14 @@ func TestPing_GetOpId(t *testing.T) {
 		fields fields
 		want   int64
 	}{
-		{name: "ping", fields: fields{structs.MsgPingRsp, 1}, want: 1},
+		{
+			name: "ping",
+			fields: fields{
+				structs.MsgPingRsp,
+				1,
+			},
+			want: 1,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
