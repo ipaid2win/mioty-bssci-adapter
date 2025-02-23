@@ -238,6 +238,11 @@ func TestStatusRsp_IntoProto(t *testing.T) {
 
 	var testTime uint64 = 1000000005
 
+	var testUptime uint64 = 1000
+	var testTemp float64 = 45.5
+	var testCpu float64 = 0.5
+	var testMemory float64 = 0.6
+
 	testTs := timestamppb.Timestamp{
 		Seconds: int64(1000000),
 		Nanos:   int32(5),
@@ -265,53 +270,94 @@ func TestStatusRsp_IntoProto(t *testing.T) {
 		args   args
 		want   *msg.BasestationStatus
 	}{
-		{name: "statusRsp1", fields: fields{
-			Command:     structs.MsgStatusRsp,
-			OpId:        1,
-			Code:        0,
-			Message:     "test",
-			Time:        testTime,
-			DutyCycle:   0.5,
-			GeoLocation: nil,
-			Uptime:      nil,
-			Temp:        nil,
-			CpuLoad:     nil,
-			MemLoad:     nil,
-		}, args: args{common.EUI64{1}}, want: &msg.BasestationStatus{
-			BsEui:       1,
-			StatusCode:  0,
-			StatusMsg:   "test",
-			Ts:          &testTs,
-			DutyCycle:   0.5,
-			GeoLocation: nil,
-			Uptime:      nil,
-			Temp:        nil,
-			Cpu:         nil,
-			Memory:      nil,
-		}}, {name: "statusRsp1", fields: fields{
-			Command:     structs.MsgStatusRsp,
-			OpId:        1,
-			Code:        0,
-			Message:     "test",
-			Time:        testTime,
-			DutyCycle:   0.5,
-			GeoLocation: &GeoLocation{},
-			Uptime:      nil,
-			Temp:        nil,
-			CpuLoad:     nil,
-			MemLoad:     nil,
-		}, args: args{common.EUI64{1}}, want: &msg.BasestationStatus{
-			BsEui:       1,
-			StatusCode:  0,
-			StatusMsg:   "test",
-			Ts:          &testTs,
-			DutyCycle:   0.5,
-			GeoLocation: &msg.GeoLocation{},
-			Uptime:      nil,
-			Temp:        nil,
-			Cpu:         nil,
-			Memory:      nil,
-		}},
+		{
+			name: "statusRsp1",
+			fields: fields{
+				Command:     structs.MsgStatusRsp,
+				OpId:        1,
+				Code:        0,
+				Message:     "test",
+				Time:        testTime,
+				DutyCycle:   0.5,
+				GeoLocation: nil,
+				Uptime:      nil,
+				Temp:        nil,
+				CpuLoad:     nil,
+				MemLoad:     nil,
+			},
+			args: args{common.EUI64{1}},
+			want: &msg.BasestationStatus{
+				BsEui:       1,
+				StatusCode:  0,
+				StatusMsg:   "test",
+				Ts:          &testTs,
+				DutyCycle:   0.5,
+				GeoLocation: nil,
+				Uptime:      nil,
+				Temp:        nil,
+				Cpu:         nil,
+				Memory:      nil,
+			},
+		},
+		{
+			name: "statusRsp2",
+			fields: fields{
+				Command:     structs.MsgStatusRsp,
+				OpId:        1,
+				Code:        0,
+				Message:     "test",
+				Time:        testTime,
+				DutyCycle:   0.5,
+				GeoLocation: &GeoLocation{},
+				Uptime:      nil,
+				Temp:        nil,
+				CpuLoad:     nil,
+				MemLoad:     nil,
+			},
+			args: args{common.EUI64{1}},
+			want: &msg.BasestationStatus{
+				BsEui:       1,
+				StatusCode:  0,
+				StatusMsg:   "test",
+				Ts:          &testTs,
+				DutyCycle:   0.5,
+				GeoLocation: &msg.GeoLocation{},
+				Uptime:      nil,
+				Temp:        nil,
+				Cpu:         nil,
+				Memory:      nil,
+			},
+		},
+
+		{
+			name: "statusRsp3",
+			fields: fields{
+				Command:     structs.MsgStatusRsp,
+				OpId:        1,
+				Code:        0,
+				Message:     "test",
+				Time:        testTime,
+				DutyCycle:   0.5,
+				GeoLocation: &GeoLocation{},
+				Uptime:      &testUptime,
+				Temp:        &testTemp,
+				CpuLoad:     &testCpu,
+				MemLoad:     &testMemory,
+			},
+			args: args{common.EUI64{1}},
+			want: &msg.BasestationStatus{
+				BsEui:       1,
+				StatusCode:  0,
+				StatusMsg:   "test",
+				Ts:          &testTs,
+				DutyCycle:   0.5,
+				GeoLocation: &msg.GeoLocation{},
+				Uptime:      &testUptime,
+				Temp:        &testTemp,
+				Cpu:         &testCpu,
+				Memory:      &testMemory,
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

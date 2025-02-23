@@ -3,11 +3,31 @@ package messages
 import (
 	"mioty-bssci-adapter/internal/backend/bssci_v1/structs"
 	"mioty-bssci-adapter/internal/common"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/suite"
 )
 
-func TestMessage_UnmarshalMessagePack(t *testing.T) {
+type TestMessageData struct {
+	name    string
+	msgType Message
+	raw     []byte
+	msg     Message
+	wantErr bool
+}
+
+type TestMessageSuite struct {
+	suite.Suite
+
+	data []TestMessageData
+}
+
+func TestMessage(t *testing.T) {
+	suite.Run(t, new(TestMessageSuite))
+}
+
+func (ts *TestMessageSuite) SetupSuite() {
 	testVendor := "Test Vendor"
 	testModel := "Test Model"
 	testBsName := "M0007327767F3"
@@ -18,192 +38,171 @@ func TestMessage_UnmarshalMessagePack(t *testing.T) {
 	testScEui := common.EUI64{0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01}
 	testScName := "Test Name"
 
-	tests := []struct {
-		name    string
-		msg     Message
-		raw     []byte
-		want    Message
-		wantErr bool
-	}{
-		{
-			name: "msgCon",
-			msg:  &Con{},
-			raw:  []byte{137, 167, 99, 111, 109, 109, 97, 110, 100, 163, 99, 111, 110, 164, 111, 112, 73, 100, 0, 167, 118, 101, 114, 115, 105, 111, 110, 165, 49, 46, 48, 46, 48, 165, 98, 115, 69, 117, 105, 203, 67, 28, 200, 0, 1, 221, 159, 204, 166, 118, 101, 110, 100, 111, 114, 171, 84, 101, 115, 116, 32, 86, 101, 110, 100, 111, 114, 165, 109, 111, 100, 101, 108, 170, 84, 101, 115, 116, 32, 77, 111, 100, 101, 108, 164, 110, 97, 109, 101, 173, 77, 48, 48, 48, 55, 51, 50, 55, 55, 54, 55, 70, 51, 164, 98, 105, 100, 105, 195, 168, 115, 110, 66, 115, 85, 117, 105, 100, 220, 0, 16, 208, 195, 114, 208, 197, 33, 208, 167, 120, 73, 208, 155, 208, 139, 78, 41, 208, 199, 208, 131, 208, 183, 53, 208, 221},
-			want: &Con{Command: structs.MsgCon, OpId: 0,
-				Version:  testVersion,
-				BsEui:    testBsEui,
-				Vendor:   &testVendor,
-				Model:    &testModel,
-				Name:     &testBsName,
-				SnBsUuid: testBsSessionUuid,
-				Bidi:     true,
-			}, wantErr: false,
+	var testStatusUptime uint64 = 1000
+	var testStatusTemp float64 = 45.5
+	var testStatusCpu float64 = 0.5
+	var testStatusMemory float64 = 0.6
+
+	testCon := TestMessageData{
+		name:    "msgCon",
+		msgType: &Con{},
+		raw:     []byte{137, 167, 99, 111, 109, 109, 97, 110, 100, 163, 99, 111, 110, 164, 111, 112, 73, 100, 0, 167, 118, 101, 114, 115, 105, 111, 110, 165, 49, 46, 48, 46, 48, 165, 98, 115, 69, 117, 105, 203, 67, 28, 200, 0, 1, 221, 159, 204, 166, 118, 101, 110, 100, 111, 114, 171, 84, 101, 115, 116, 32, 86, 101, 110, 100, 111, 114, 165, 109, 111, 100, 101, 108, 170, 84, 101, 115, 116, 32, 77, 111, 100, 101, 108, 164, 110, 97, 109, 101, 173, 77, 48, 48, 48, 55, 51, 50, 55, 55, 54, 55, 70, 51, 164, 98, 105, 100, 105, 195, 168, 115, 110, 66, 115, 85, 117, 105, 100, 220, 0, 16, 208, 195, 114, 208, 197, 33, 208, 167, 120, 73, 208, 155, 208, 139, 78, 41, 208, 199, 208, 131, 208, 183, 53, 208, 221},
+		msg: &Con{Command: structs.MsgCon, OpId: 0,
+			Version:  testVersion,
+			BsEui:    testBsEui,
+			Vendor:   &testVendor,
+			Model:    &testModel,
+			Name:     &testBsName,
+			SnBsUuid: testBsSessionUuid,
+			Bidi:     true,
 		},
-		{
-			name: "msgConRsp",
-			msg:  &ConRsp{},
-			raw:  []byte{137, 167, 99, 111, 109, 109, 97, 110, 100, 166, 99, 111, 110, 82, 115, 112, 164, 111, 112, 73, 100, 0, 167, 118, 101, 114, 115, 105, 111, 110, 165, 49, 46, 48, 46, 48, 165, 98, 115, 69, 117, 105, 203, 67, 112, 16, 16, 16, 16, 16, 16, 166, 118, 101, 110, 100, 111, 114, 171, 84, 101, 115, 116, 32, 86, 101, 110, 100, 111, 114, 165, 109, 111, 100, 101, 108, 170, 84, 101, 115, 116, 32, 77, 111, 100, 101, 108, 164, 110, 97, 109, 101, 169, 84, 101, 115, 116, 32, 78, 97, 109, 101, 168, 115, 110, 82, 101, 115, 117, 109, 101, 194, 168, 115, 110, 83, 99, 85, 117, 105, 100, 220, 0, 16, 208, 195, 114, 208, 197, 33, 208, 167, 120, 73, 208, 155, 208, 139, 78, 41, 208, 199, 208, 131, 208, 183, 53, 208, 221},
-			want: &ConRsp{
-				Command:  structs.MsgConRsp,
-				OpId:     0,
-				Version:  testVersion,
-				ScEui:    testScEui,
-				Vendor:   &testVendor,
-				Model:    &testModel,
-				Name:     &testScName,
-				SnResume: false,
-				SnScUuid: testScSessionUuid,
-			}, wantErr: false,
-		},
-		{
-			name: "msgConCmp",
-			msg:  &ConCmp{},
-			raw:  []byte{130, 167, 99, 111, 109, 109, 97, 110, 100, 166, 99, 111, 110, 67, 109, 112, 164, 111, 112, 73, 100, 0},
-			want: &ConCmp{
-				Command: structs.MsgConCmp,
-				OpId:    0,
-			}, wantErr: false,
-		},
-		{
-			name: "msgPing",
-			msg:  &Ping{},
-			raw:  []byte{130, 167, 99, 111, 109, 109, 97, 110, 100, 164, 112, 105, 110, 103, 164, 111, 112, 73, 100, 0},
-			want: &Ping{
-				Command: structs.MsgPing,
-				OpId:    0,
-			}, wantErr: false,
-		},
-		{
-			name: "msgPingRsp",
-			msg:  &PingRsp{},
-			raw:  []byte{130, 167, 99, 111, 109, 109, 97, 110, 100, 167, 112, 105, 110, 103, 82, 115, 112, 164, 111, 112, 73, 100, 0},
-			want: &PingRsp{
-				Command: structs.MsgPingRsp,
-				OpId:    0,
-			}, wantErr: false,
-		},
-		{
-			name: "msgPingCmp",
-			msg:  &PingCmp{},
-			raw:  []byte{130, 167, 99, 111, 109, 109, 97, 110, 100, 167, 112, 105, 110, 103, 67, 109, 112, 164, 111, 112, 73, 100, 0},
-			want: &PingCmp{
-				Command: structs.MsgPingCmp,
-				OpId:    0,
-			}, wantErr: false,
-		},
+		wantErr: false,
 	}
-	for _, tt := range tests {
+
+	testConRsp := TestMessageData{
+		name:    "msgConRsp",
+		msgType: &ConRsp{},
+		raw:     []byte{137, 167, 99, 111, 109, 109, 97, 110, 100, 166, 99, 111, 110, 82, 115, 112, 164, 111, 112, 73, 100, 0, 167, 118, 101, 114, 115, 105, 111, 110, 165, 49, 46, 48, 46, 48, 165, 98, 115, 69, 117, 105, 203, 67, 112, 16, 16, 16, 16, 16, 16, 166, 118, 101, 110, 100, 111, 114, 171, 84, 101, 115, 116, 32, 86, 101, 110, 100, 111, 114, 165, 109, 111, 100, 101, 108, 170, 84, 101, 115, 116, 32, 77, 111, 100, 101, 108, 164, 110, 97, 109, 101, 169, 84, 101, 115, 116, 32, 78, 97, 109, 101, 168, 115, 110, 82, 101, 115, 117, 109, 101, 194, 168, 115, 110, 83, 99, 85, 117, 105, 100, 220, 0, 16, 208, 195, 114, 208, 197, 33, 208, 167, 120, 73, 208, 155, 208, 139, 78, 41, 208, 199, 208, 131, 208, 183, 53, 208, 221},
+		msg: &ConRsp{
+			Command:  structs.MsgConRsp,
+			OpId:     0,
+			Version:  testVersion,
+			ScEui:    testScEui,
+			Vendor:   &testVendor,
+			Model:    &testModel,
+			Name:     &testScName,
+			SnResume: false,
+			SnScUuid: testScSessionUuid,
+		},
+		wantErr: false,
+	}
+
+	testConCmp := TestMessageData{
+		name:    "msgConCmp",
+		msgType: &ConCmp{},
+		raw:     []byte{130, 167, 99, 111, 109, 109, 97, 110, 100, 166, 99, 111, 110, 67, 109, 112, 164, 111, 112, 73, 100, 0},
+		msg: &ConCmp{
+			Command: structs.MsgConCmp,
+			OpId:    0,
+		}, wantErr: false,
+	}
+
+	testPing := TestMessageData{
+		name:    "msgPing",
+		msgType: &Ping{},
+		raw:     []byte{130, 167, 99, 111, 109, 109, 97, 110, 100, 164, 112, 105, 110, 103, 164, 111, 112, 73, 100, 0},
+		msg: &Ping{
+			Command: structs.MsgPing,
+			OpId:    0,
+		}, wantErr: false,
+	}
+	testPingRsp := TestMessageData{
+		name:    "msgPingRsp",
+		msgType: &PingRsp{},
+		raw:     []byte{130, 167, 99, 111, 109, 109, 97, 110, 100, 167, 112, 105, 110, 103, 82, 115, 112, 164, 111, 112, 73, 100, 0},
+		msg: &PingRsp{
+			Command: structs.MsgPingRsp,
+			OpId:    0,
+		}, wantErr: false,
+	}
+
+	testPingCmp := TestMessageData{
+		name:    "msgPingCmp",
+		msgType: &PingCmp{},
+		raw:     []byte{130, 167, 99, 111, 109, 109, 97, 110, 100, 167, 112, 105, 110, 103, 67, 109, 112, 164, 111, 112, 73, 100, 0},
+		msg: &PingCmp{
+			Command: structs.MsgPingCmp,
+			OpId:    0,
+		}, wantErr: false,
+	}
+
+	testStatus := TestMessageData{
+		name:    "msgStatus",
+		msgType: &Status{},
+		raw:     []byte{130, 167, 99, 111, 109, 109, 97, 110, 100, 166, 115, 116, 97, 116, 117, 115, 164, 111, 112, 73, 100, 0},
+		msg: &Status{
+			Command: structs.MsgStatus,
+			OpId:    0,
+		}, wantErr: false,
+	}
+
+	testStatusRsp := TestMessageData{
+		name:    "msgStatusRsp",
+		msgType: &StatusRsp{},
+		raw:     []byte{138, 167, 99, 111, 109, 109, 97, 110, 100, 169, 115, 116, 97, 116, 117, 115, 82, 115, 112, 164, 111, 112, 73, 100, 0, 164, 99, 111, 100, 101, 0, 167, 109, 101, 115, 115, 97, 103, 101, 162, 111, 107, 164, 116, 105, 109, 101, 206, 59, 154, 202, 5, 169, 100, 117, 116, 121, 67, 121, 99, 108, 101, 202, 62, 204, 204, 205, 166, 117, 112, 116, 105, 109, 101, 205, 3, 232, 164, 116, 101, 109, 112, 203, 64, 70, 192, 0, 0, 0, 0, 0, 167, 99, 112, 117, 76, 111, 97, 100, 203, 63, 224, 0, 0, 0, 0, 0, 0, 167, 109, 101, 109, 76, 111, 97, 100, 203, 63, 227, 51, 51, 51, 51, 51, 51},
+		msg: &StatusRsp{
+			Command:     structs.MsgStatusRsp,
+			OpId:        0,
+			Code:        0,
+			Message:     "ok",
+			Time:        1000000005,
+			DutyCycle:   0.4,
+			GeoLocation: nil,
+			Uptime:      &testStatusUptime,
+			Temp:        &testStatusTemp,
+			CpuLoad:     &testStatusCpu,
+			MemLoad:     &testStatusMemory,
+		}, wantErr: false,
+	}
+
+	testStatusCmp := TestMessageData{
+		name:    "msgStatusCmp",
+		msgType: &StatusCmp{},
+		raw:     []byte{130, 167, 99, 111, 109, 109, 97, 110, 100, 169, 115, 116, 97, 116, 117, 115, 67, 109, 112, 164, 111, 112, 73, 100, 0},
+		msg: &StatusCmp{
+			Command: structs.MsgStatusCmp,
+			OpId:    0,
+		}, wantErr: false,
+	}
+
+	ts.data = []TestMessageData{testCon, testConRsp, testConCmp, testPing, testPingRsp, testPingCmp, testStatus, testStatusRsp, testStatusCmp}
+
+}
+
+func (ts *TestMessageSuite) TestMessage_UnmarshalMessagePack() {
+	t := ts.T()
+	assert := assert.New(t)
+
+	for _, tt := range ts.data {
 		t.Run(tt.name, func(t *testing.T) {
-			msg := tt.msg
+			msg := tt.msgType
 			_, err := msg.UnmarshalMsg(tt.raw)
 
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Message.UnmarshalMsg() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(msg, tt.want) {
-				t.Errorf("Message.UnmarshalMsg() = %v, want %v", msg, tt.want)
-			}
+			if tt.wantErr {
+				if !assert.Error(err, "Message.UnmarshalMsg() expected error = %v, got value: %v", err, msg) {
+					t.Errorf("Message.UnmarshalMsg() expected error = %v, got value: %v", err, msg)
+				}
+			} else {
+				if !assert.NoError(err, "Message.UnmarshalMsg() unexpected error = %v", err) {
+					t.Errorf("Message.UnmarshalMsg() unexpected error = %v", err)
+				} else if !assert.Equal(tt.msg, msg, "Message.UnmarshalMsg() = %v, want %v", msg, tt.msg) {
+					t.Errorf("Message.UnmarshalMsg() = %v, want %v", msg, tt.msg)
+				}
 
+			}
 		})
 	}
 }
 
-func TestMessage_MarshalMessagePack(t *testing.T) {
-	testVendor := "Test Vendor"
-	testModel := "Test Model"
-	testBsName := "M0007327767F3"
-	testVersion := "1.0.0"
-	testBsEui := common.EUI64{0x00, 0x07, 0x32, 0x00, 0x00, 0x77, 0x67, 0xF3}
-	testBsSessionUuid := structs.SessionUuid{-61, 114, -59, 33, -89, 120, 73, -101, -117, 78, 41, -57, -125, -73, 53, -35}
-	testScSessionUuid := structs.SessionUuid{-61, 114, -59, 33, -89, 120, 73, -101, -117, 78, 41, -57, -125, -73, 53, -35}
-	testScEui := common.EUI64{0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01}
-	testScName := "Test Name"
+func (ts *TestMessageSuite) TestMessage_MarshalMessagePack() {
+	t := ts.T()
+	assert := assert.New(t)
 
-	tests := []struct {
-		name    string
-		msg     Message
-		want    []byte
-		wantErr bool
-	}{
-		{
-			name: "msgCon",
-			msg: &Con{Command: structs.MsgCon, OpId: 0,
-				Version:  testVersion,
-				BsEui:    testBsEui,
-				Vendor:   &testVendor,
-				Model:    &testModel,
-				Name:     &testBsName,
-				SnBsUuid: testBsSessionUuid,
-				Bidi:     true,
-			},
-			want:    []byte{137, 167, 99, 111, 109, 109, 97, 110, 100, 163, 99, 111, 110, 164, 111, 112, 73, 100, 0, 167, 118, 101, 114, 115, 105, 111, 110, 165, 49, 46, 48, 46, 48, 165, 98, 115, 69, 117, 105, 203, 67, 28, 200, 0, 1, 221, 159, 204, 166, 118, 101, 110, 100, 111, 114, 171, 84, 101, 115, 116, 32, 86, 101, 110, 100, 111, 114, 165, 109, 111, 100, 101, 108, 170, 84, 101, 115, 116, 32, 77, 111, 100, 101, 108, 164, 110, 97, 109, 101, 173, 77, 48, 48, 48, 55, 51, 50, 55, 55, 54, 55, 70, 51, 164, 98, 105, 100, 105, 195, 168, 115, 110, 66, 115, 85, 117, 105, 100, 220, 0, 16, 208, 195, 114, 208, 197, 33, 208, 167, 120, 73, 208, 155, 208, 139, 78, 41, 208, 199, 208, 131, 208, 183, 53, 208, 221},
-			wantErr: false,
-		},
-		{
-			name: "msgConRsp",
-			msg: &ConRsp{
-				Command:  structs.MsgConRsp,
-				OpId:     0,
-				Version:  testVersion,
-				ScEui:    testScEui,
-				Vendor:   &testVendor,
-				Model:    &testModel,
-				Name:     &testScName,
-				SnResume: false,
-				SnScUuid: testScSessionUuid,
-			},
-			want:    []byte{137, 167, 99, 111, 109, 109, 97, 110, 100, 166, 99, 111, 110, 82, 115, 112, 164, 111, 112, 73, 100, 0, 167, 118, 101, 114, 115, 105, 111, 110, 165, 49, 46, 48, 46, 48, 165, 98, 115, 69, 117, 105, 203, 67, 112, 16, 16, 16, 16, 16, 16, 166, 118, 101, 110, 100, 111, 114, 171, 84, 101, 115, 116, 32, 86, 101, 110, 100, 111, 114, 165, 109, 111, 100, 101, 108, 170, 84, 101, 115, 116, 32, 77, 111, 100, 101, 108, 164, 110, 97, 109, 101, 169, 84, 101, 115, 116, 32, 78, 97, 109, 101, 168, 115, 110, 82, 101, 115, 117, 109, 101, 194, 168, 115, 110, 83, 99, 85, 117, 105, 100, 220, 0, 16, 208, 195, 114, 208, 197, 33, 208, 167, 120, 73, 208, 155, 208, 139, 78, 41, 208, 199, 208, 131, 208, 183, 53, 208, 221},
-			wantErr: false,
-		},
-		{
-			name: "msgConCmp",
-			msg: &ConCmp{
-				Command: structs.MsgConCmp,
-				OpId:    0,
-			},
-			want:    []byte{130, 167, 99, 111, 109, 109, 97, 110, 100, 166, 99, 111, 110, 67, 109, 112, 164, 111, 112, 73, 100, 0},
-			wantErr: false,
-		},
-		{
-			name: "msgPing",
-			msg: &Ping{
-				Command: structs.MsgPing,
-				OpId:    0,
-			},
-			want:    []byte{130, 167, 99, 111, 109, 109, 97, 110, 100, 164, 112, 105, 110, 103, 164, 111, 112, 73, 100, 0},
-			wantErr: false,
-		},
-		{
-			name: "msgPingRsp",
-			msg: &PingRsp{
-				Command: structs.MsgPingRsp,
-				OpId:    0,
-			},
-			want:    []byte{130, 167, 99, 111, 109, 109, 97, 110, 100, 167, 112, 105, 110, 103, 82, 115, 112, 164, 111, 112, 73, 100, 0},
-			wantErr: false,
-		},
-		{
-			name: "msgPingCmp",
-			msg: &PingCmp{
-				Command: structs.MsgPingCmp,
-				OpId:    0,
-			},
-			want:    []byte{130, 167, 99, 111, 109, 109, 97, 110, 100, 167, 112, 105, 110, 103, 67, 109, 112, 164, 111, 112, 73, 100, 0},
-			wantErr: false,
-		},
-	}
-	for _, tt := range tests {
+	for _, tt := range ts.data {
 		t.Run(tt.name, func(t *testing.T) {
 			msg := tt.msg
 			raw, err := msg.MarshalMsg(nil)
 
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Message.MarshalMsg() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(raw, tt.want) {
-				t.Errorf("Message.MarshalMsg() = %v, want %v", raw, tt.want)
+			if tt.wantErr {
+				if !assert.Error(err, "Message.MarshalMsg() expected error = %v, got value: %v", err, raw) {
+					t.Errorf("Message.MarshalMsg() expected error = %v, got value: %v", err, raw)
+				}
+			} else {
+				if !assert.NoError(err, "Message.MarshalMsg() unexpected error = %v", err) {
+					t.Errorf("Message.MarshalMsg() unexpected error = %v", err)
+				} else if !assert.Equal(tt.raw, raw, "Message.MarshalMsg() = %v, want %v", raw, tt.raw) {
+					t.Errorf("Message.MarshalMsg() = %v, want %v", raw, tt.raw)
+				}
 			}
 
 		})
