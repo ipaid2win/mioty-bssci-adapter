@@ -62,7 +62,7 @@ func (m *DetPrpRsp) GetOpId() int64 {
 }
 
 func (m *DetPrpRsp) GetCommand() structs.Command {
-	return structs.MsgPing
+	return structs.MsgDetPrpRsp
 }
 
 // Detach propagate complete
