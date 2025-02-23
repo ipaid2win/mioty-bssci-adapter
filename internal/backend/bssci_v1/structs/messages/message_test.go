@@ -32,13 +32,17 @@ func TestMessage(t *testing.T) {
 func (ts *TestMessageSuite) SetupSuite() {
 	testVendor := "Test Vendor"
 	testModel := "Test Model"
-	testBsName := "M0007327767F3"
 	testVersion := "1.0.0"
-	testBsEui := common.EUI64{0x00, 0x07, 0x32, 0x00, 0x00, 0x77, 0x67, 0xF3}
+
+	testBsName := "M0007327767F3"
+	testScName := "Test Name"
+
 	testBsSessionUuid := structs.SessionUuid{-61, 114, -59, 33, -89, 120, 73, -101, -117, 78, 41, -57, -125, -73, 53, -35}
 	testScSessionUuid := structs.SessionUuid{-61, 114, -59, 33, -89, 120, 73, -101, -117, 78, 41, -57, -125, -73, 53, -35}
+
+	testBsEui := common.EUI64{0x00, 0x07, 0x32, 0x00, 0x00, 0x77, 0x67, 0xF3}
 	testScEui := common.EUI64{0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01}
-	testScName := "Test Name"
+	testEpEui := common.EUI64{0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08}
 
 	var testStatusUptime uint64 = 1000
 	var testStatusTemp float64 = 45.5
@@ -256,7 +260,54 @@ func (ts *TestMessageSuite) SetupSuite() {
 }`,
 	}
 
-	ts.data = []TestMessageData{testCon, testConRsp, testConCmp, testPing, testPingRsp, testPingCmp, testStatus, testStatusRsp, testStatusCmp}
+	testDetPrp := TestMessageData{
+		name:    "msgDetPrp",
+		msgType: &DetPrp{},
+		raw:     []byte{131, 167, 99, 111, 109, 109, 97, 110, 100, 166, 100, 101, 116, 80, 114, 112, 164, 111, 112, 73, 100, 0, 165, 101, 112, 69, 117, 105, 203, 67, 112, 32, 48, 64, 80, 96, 112},
+		msg: &DetPrp{
+			Command: structs.MsgDetPrp,
+			OpId:    0,
+			EpEui: testEpEui,
+		},
+		wantErr: false,
+		json: `{
+	"command": "detPrp",
+	"opId": 0,
+	"epEui": 72623859790382856
+}`,
+	}
+
+	testDetPrpRsp := TestMessageData{
+		name:    "msgDetPrpRsp",
+		msgType: &DetPrpRsp{},
+		raw:     []byte{130, 167, 99, 111, 109, 109, 97, 110, 100, 169, 100, 101, 116, 80, 114, 112, 82, 115, 112, 164, 111, 112, 73, 100, 0},
+		msg: &DetPrpRsp{
+			Command: structs.MsgDetPrpRsp,
+			OpId:    0,
+		},
+		wantErr: false,
+		json: `{
+	"command": "detPrpRsp",
+	"opId": 0
+}`,
+	}
+
+	testDetPrpCmp := TestMessageData{
+		name:    "msgDetPrpCmp",
+		msgType: &DetPrpCmp{},
+		raw:     []byte{130, 167, 99, 111, 109, 109, 97, 110, 100, 169, 100, 101, 116, 80, 114, 112, 67, 109, 112, 164, 111, 112, 73, 100, 0},
+		msg: &DetPrpCmp{
+			Command: structs.MsgDetPrpCmp,
+			OpId:    0,
+		},
+		wantErr: false,
+		json: `{
+	"command": "detPrpCmp",
+	"opId": 0
+}`,
+	}
+
+	ts.data = []TestMessageData{testCon, testConRsp, testConCmp, testPing, testPingRsp, testPingCmp, testStatus, testStatusRsp, testStatusCmp, testDetPrp, testDetPrpRsp, testDetPrpCmp}
 
 }
 
