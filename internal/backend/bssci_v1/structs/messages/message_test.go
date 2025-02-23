@@ -37,7 +37,6 @@ func (ts *TestMessageSuite) SetupSuite() {
 	testBsName := "M0007327767F3"
 	testScName := "Test Name"
 
-
 	// equivalent to "f8d69e8a-a9dd-46d4-b975-11d654114a1f"
 	testScSessionUuid := structs.SessionUuid{-61, 114, -59, 33, -89, 120, 73, -101, -117, 78, 41, -57, -125, -73, 53, -35}
 	// equivalent to "c372c521-a778-499b-8b4e-29c783b735dd"
@@ -276,7 +275,47 @@ func (ts *TestMessageSuite) SetupSuite() {
 }`,
 	}
 
-	ts.data = []TestMessageData{testCon, testConRsp, testConCmp, testPing, testPingRsp, testPingCmp, testStatus, testStatusRsp, testStatusCmp, testDetPrp, testDetPrpRsp, testDetPrpCmp}
+	testBssciError := TestMessageData{
+		name:    "msgError",
+		msgType: &BssciError{},
+		raw:     []byte{132, 167, 99, 111, 109, 109, 97, 110, 100, 165, 101, 114, 114, 111, 114, 164, 111, 112, 73, 100, 0, 164, 99, 111, 100, 101, 1, 167, 109, 101, 115, 115, 97, 103, 101, 173, 101, 114, 114, 111, 114, 32, 109, 101, 115, 115, 97, 103, 101},
+		msg: &BssciError{
+			Command: structs.MsgError,
+			OpId:    0,
+			Code: 1,
+			Message: "error message",
+		},
+		wantErr: false,
+		json: `{
+	"command": "error",
+	"opId": 0,
+	"code": 1,
+	"message": "error message"
+}`,
+	}
+
+	testBssciErrorAck := TestMessageData{
+		name:    "msgErrorAck",
+		msgType: &BssciErrorAck{},
+		raw:     []byte{130, 167, 99, 111, 109, 109, 97, 110, 100, 168, 101, 114, 114, 111, 114, 65, 99, 107, 164, 111, 112, 73, 100, 0},
+		msg: &BssciErrorAck{
+			Command: structs.MsgErrorAck,
+			OpId:    0,
+		},
+		wantErr: false,
+		json: `{
+	"command": "errorAck",
+	"opId": 0
+}`,
+	}
+
+	ts.data = []TestMessageData{
+		testCon, testConRsp, testConCmp,
+		testPing, testPingRsp, testPingCmp,
+		testStatus, testStatusRsp, testStatusCmp,
+		testDetPrp, testDetPrpRsp, testDetPrpCmp,
+		testBssciError, testBssciErrorAck,
+	}
 
 }
 
