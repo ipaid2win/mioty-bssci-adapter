@@ -10,20 +10,40 @@ import (
 // BSSCI encodes as 16 signed ints
 type SessionUuid [16]int8
 
-func NewSessionUuid(uuid uuid.UUID) (session SessionUuid) {
-	for i, s := range uuid {
-		session[i] = int8(s)
+func NewSessionUuid(uuid uuid.UUID) (s SessionUuid) {
+	for i, v := range uuid {
+		s[i] = int8(v)
 	}
 	return
 }
 
-func (session SessionUuid) ToUuid() (u uuid.UUID) {
-	for i, s := range session {
-		u[i] = byte(s)
+func (s SessionUuid) ToUuid() (u uuid.UUID) {
+	for i, v := range s {
+		u[i] = byte(v)
 	}
 	return
 }
 
-func (session SessionUuid) String() string {
-	return session.ToUuid().String()
+func (s SessionUuid) String() string {
+	return s.ToUuid().String()
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s SessionUuid) MarshalText() ([]byte, error) {
+	return []byte(s.String()), nil
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *SessionUuid) UnmarshalText(text []byte) error {
+	u, err := uuid.ParseBytes(text)
+	if err != nil {
+		return err
+	}
+	su:= NewSessionUuid(u)
+
+	uu := su.ToUuid()
+	_ = uu
+	s = &su
+
+	return nil
 }
