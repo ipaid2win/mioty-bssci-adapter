@@ -1,6 +1,7 @@
 package messages
 
 import (
+	"encoding/json"
 	"mioty-bssci-adapter/internal/backend/bssci_v1/structs"
 	"mioty-bssci-adapter/internal/common"
 	"testing"
@@ -15,6 +16,7 @@ type TestMessageData struct {
 	raw     []byte
 	msg     Message
 	wantErr bool
+	json    string
 }
 
 type TestMessageSuite struct {
@@ -57,12 +59,40 @@ func (ts *TestMessageSuite) SetupSuite() {
 			Bidi:     true,
 		},
 		wantErr: false,
+		json: `{
+    "command": "con",
+    "opId": 0,
+    "version": "1.0.0",
+    "bsEui": 2025300426188787,
+    "vendor": "Test Vendor",
+    "model": "Test Model",
+    "name": "M0007327767F3",
+    "bidi": true,
+    "snBsUuid": [
+        -61,
+        114,
+        -59,
+        33,
+        -89,
+        120,
+        73,
+        -101,
+        -117,
+        78,
+        41,
+        -57,
+        -125,
+        -73,
+        53,
+        -35
+    ]
+}`,
 	}
 
 	testConRsp := TestMessageData{
 		name:    "msgConRsp",
 		msgType: &ConRsp{},
-		raw:     []byte{137, 167, 99, 111, 109, 109, 97, 110, 100, 166, 99, 111, 110, 82, 115, 112, 164, 111, 112, 73, 100, 0, 167, 118, 101, 114, 115, 105, 111, 110, 165, 49, 46, 48, 46, 48, 165, 98, 115, 69, 117, 105, 203, 67, 112, 16, 16, 16, 16, 16, 16, 166, 118, 101, 110, 100, 111, 114, 171, 84, 101, 115, 116, 32, 86, 101, 110, 100, 111, 114, 165, 109, 111, 100, 101, 108, 170, 84, 101, 115, 116, 32, 77, 111, 100, 101, 108, 164, 110, 97, 109, 101, 169, 84, 101, 115, 116, 32, 78, 97, 109, 101, 168, 115, 110, 82, 101, 115, 117, 109, 101, 194, 168, 115, 110, 83, 99, 85, 117, 105, 100, 220, 0, 16, 208, 195, 114, 208, 197, 33, 208, 167, 120, 73, 208, 155, 208, 139, 78, 41, 208, 199, 208, 131, 208, 183, 53, 208, 221},
+		raw:     []byte{137, 167, 99, 111, 109, 109, 97, 110, 100, 166, 99, 111, 110, 82, 115, 112, 164, 111, 112, 73, 100, 0, 167, 118, 101, 114, 115, 105, 111, 110, 165, 49, 46, 48, 46, 48, 165, 115, 99, 69, 117, 105, 203, 67, 112, 16, 16, 16, 16, 16, 16, 166, 118, 101, 110, 100, 111, 114, 171, 84, 101, 115, 116, 32, 86, 101, 110, 100, 111, 114, 165, 109, 111, 100, 101, 108, 170, 84, 101, 115, 116, 32, 77, 111, 100, 101, 108, 164, 110, 97, 109, 101, 169, 84, 101, 115, 116, 32, 78, 97, 109, 101, 168, 115, 110, 82, 101, 115, 117, 109, 101, 194, 168, 115, 110, 83, 99, 85, 117, 105, 100, 220, 0, 16, 208, 195, 114, 208, 197, 33, 208, 167, 120, 73, 208, 155, 208, 139, 78, 41, 208, 199, 208, 131, 208, 183, 53, 208, 221},
 		msg: &ConRsp{
 			Command:  structs.MsgConRsp,
 			OpId:     0,
@@ -75,6 +105,34 @@ func (ts *TestMessageSuite) SetupSuite() {
 			SnScUuid: testScSessionUuid,
 		},
 		wantErr: false,
+		json: `{
+	"command": "conRsp",
+    "opId": 0,
+    "version": "1.0.0",
+    "scEui": 72340172838076670,
+    "vendor": "Test Vendor",
+    "model": "Test Model",
+    "name": "Test Name",
+    "snResume": false,
+    "snScUuid": [
+        -61,
+        114,
+        -59,
+        33,
+        -89,
+        120,
+        73,
+        -101,
+        -117,
+        78,
+        41,
+        -57,
+        -125,
+        -73,
+        53,
+        -35
+    ]
+}`,
 	}
 
 	testConCmp := TestMessageData{
@@ -84,7 +142,12 @@ func (ts *TestMessageSuite) SetupSuite() {
 		msg: &ConCmp{
 			Command: structs.MsgConCmp,
 			OpId:    0,
-		}, wantErr: false,
+		},
+		wantErr: false,
+		json: `{
+	"command": "conCmp",
+	"opId": 0
+}`,
 	}
 
 	testPing := TestMessageData{
@@ -94,7 +157,12 @@ func (ts *TestMessageSuite) SetupSuite() {
 		msg: &Ping{
 			Command: structs.MsgPing,
 			OpId:    0,
-		}, wantErr: false,
+		},
+		wantErr: false,
+		json: `{
+	"command": "ping",
+	"opId": 0
+}`,
 	}
 	testPingRsp := TestMessageData{
 		name:    "msgPingRsp",
@@ -103,7 +171,12 @@ func (ts *TestMessageSuite) SetupSuite() {
 		msg: &PingRsp{
 			Command: structs.MsgPingRsp,
 			OpId:    0,
-		}, wantErr: false,
+		},
+		wantErr: false,
+		json: `{
+	"command": "pingRsp",
+	"opId": 0
+}`,
 	}
 
 	testPingCmp := TestMessageData{
@@ -113,7 +186,12 @@ func (ts *TestMessageSuite) SetupSuite() {
 		msg: &PingCmp{
 			Command: structs.MsgPingCmp,
 			OpId:    0,
-		}, wantErr: false,
+		},
+		wantErr: false,
+		json: `{
+	"command": "pingCmp",
+	"opId": 0
+}`,
 	}
 
 	testStatus := TestMessageData{
@@ -123,7 +201,12 @@ func (ts *TestMessageSuite) SetupSuite() {
 		msg: &Status{
 			Command: structs.MsgStatus,
 			OpId:    0,
-		}, wantErr: false,
+		},
+		wantErr: false,
+		json: `{
+	"command": "status",
+	"opId": 0
+}`,
 	}
 
 	testStatusRsp := TestMessageData{
@@ -142,7 +225,20 @@ func (ts *TestMessageSuite) SetupSuite() {
 			Temp:        &testStatusTemp,
 			CpuLoad:     &testStatusCpu,
 			MemLoad:     &testStatusMemory,
-		}, wantErr: false,
+		},
+		wantErr: false,
+		json: `{
+	"command": "statusRsp",
+	"opId": 0,
+	"code": 0,
+	"message": "ok",
+	"time": 1000000005,
+	"dutyCycle": 0.4,
+	"uptime": 1000,
+	"temp": 45.5,
+	"cpuLoad": 0.5,
+	"memLoad": 0.6
+}`,
 	}
 
 	testStatusCmp := TestMessageData{
@@ -152,7 +248,12 @@ func (ts *TestMessageSuite) SetupSuite() {
 		msg: &StatusCmp{
 			Command: structs.MsgStatusCmp,
 			OpId:    0,
-		}, wantErr: false,
+		},
+		wantErr: false,
+		json: `{
+	"command": "statusCmp",
+	"opId": 0
+}`,
 	}
 
 	ts.data = []TestMessageData{testCon, testConRsp, testConCmp, testPing, testPingRsp, testPingCmp, testStatus, testStatusRsp, testStatusCmp}
@@ -202,6 +303,59 @@ func (ts *TestMessageSuite) TestMessage_MarshalMessagePack() {
 					t.Errorf("Message.MarshalMsg() unexpected error = %v", err)
 				} else if !assert.Equal(tt.raw, raw, "Message.MarshalMsg() = %v, want %v", raw, tt.raw) {
 					t.Errorf("Message.MarshalMsg() = %v, want %v", raw, tt.raw)
+				}
+			}
+
+		})
+	}
+}
+
+func (ts *TestMessageSuite) TestMessage_UnmarshalJson() {
+	t := ts.T()
+	assert := assert.New(t)
+
+	for _, tt := range ts.data {
+		t.Run(tt.name, func(t *testing.T) {
+			msg := tt.msgType
+			err := json.Unmarshal([]byte(tt.json), msg)
+
+			if tt.wantErr {
+				if !assert.Error(err, "Message.UnmarshalJson() expected error = %v, got value: %v", err, msg) {
+					t.Errorf("Message.UnmarshalJson() expected error = %v, got value: %v", err, msg)
+				}
+			} else {
+				if !assert.NoError(err, "Message.UnmarshalJson() unexpected error = %v", err) {
+					t.Errorf("Message.UnmarshalJson() unexpected error = %v", err)
+				} else if !assert.Equal(tt.msg, msg, "Message.UnmarshalJson() = %v, want %v", msg, tt.msg) {
+					t.Errorf("Message.UnmarshalJson() = %v, want %v", msg, tt.msg)
+				}
+
+			}
+		})
+	}
+}
+
+func (ts *TestMessageSuite) TestMessage_MarshalJson() {
+	t := ts.T()
+	assert := assert.New(t)
+
+	for _, tt := range ts.data {
+		t.Run(tt.name, func(t *testing.T) {
+			msg := tt.msg
+
+			jsonRaw, err := json.MarshalIndent(msg, "", "\t")
+
+			value := string(jsonRaw)
+
+			if tt.wantErr {
+				if !assert.Error(err, "Message.MarshalMsg() expected error = %v, got value: %v", err, value) {
+					t.Errorf("Message.MarshalMsg() expected error = %v, got value: %v", err, value)
+				}
+			} else {
+				if !assert.NoError(err, "Message.MarshalMsg() unexpected error = %v", err) {
+					t.Errorf("Message.MarshalMsg() unexpected error = %v", err)
+				} else if !assert.Equal(tt.json, value, "Message.MarshalMsg() = %v, want %v", value, tt.json) {
+					t.Errorf("Message.MarshalMsg() = %v, want %v", value, tt.json)
 				}
 			}
 
