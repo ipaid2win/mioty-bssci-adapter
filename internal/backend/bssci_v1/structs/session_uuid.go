@@ -39,11 +39,11 @@ func (s *SessionUuid) UnmarshalText(text []byte) error {
 	if err != nil {
 		return err
 	}
-	su:= NewSessionUuid(u)
 
-	uu := su.ToUuid()
-	_ = uu
-	s = &su
+	for i, v := range u {
+		s[i] = int8(v)
+	}
 
 	return nil
 }
+
