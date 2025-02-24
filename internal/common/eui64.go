@@ -25,15 +25,43 @@ func Eui64FromInt(in int64) EUI64 {
 	return b
 }
 
+// helper function to parse a int64 formatted eui64
+func Eui64FromUnsignedInt(in uint64) EUI64 {
+	b := [8]byte{
+		byte(0xff & in),
+		byte(0xff & (in >> 8)),
+		byte(0xff & (in >> 16)),
+		byte(0xff & (in >> 24)),
+		byte(0xff & (in >> 32)),
+		byte(0xff & (in >> 40)),
+		byte(0xff & (in >> 48)),
+		byte(0xff & (in >> 56)),
+	}
+
+	return b
+}
+
 // helper function to parse eui64 into a int64 
 func (e *EUI64) ToInt() int64 {
 	return int64(e[0]) | int64(e[1])<<8 | int64(e[2])<<16 | int64(e[3])<<24 |
 		int64(e[4])<<32 | int64(e[5])<<40 | int64(e[6])<<48 | int64(e[7])<<56
 }
 
+// helper function to parse eui64 into a uint64 
+func (e *EUI64) ToUnsignedInt() uint64 {
+	return uint64(e[0]) | uint64(e[1])<<8 | uint64(e[2])<<16 | uint64(e[3])<<24 |
+		uint64(e[4])<<32 | uint64(e[5])<<40 | uint64(e[6])<<48 | uint64(e[7])<<56
+}
+
+
 // helper function to parse eui64 into a int64 
 func Eui64toInt(e EUI64) int64 {
 	return e.ToInt()
+}
+
+// helper function to parse eui64 into a int64 
+func Eui64toUnsignedInt(e EUI64) uint64 {
+	return e.ToUnsignedInt()
 }
 
 
