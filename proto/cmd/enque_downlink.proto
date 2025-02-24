@@ -1,0 +1,55 @@
+
+syntax = "proto3";
+// edition = "2023";
+
+package cmd;
+
+option go_package = "mioty-bssci-adapter/internal/api/cmd";
+// option features.(pb.go).api_level = API_OPAQUE;
+
+
+message EnqueDownlink{
+
+    // Basestation EUI, 8 bytes little endian
+    uint64 bs_eui = 1;
+    // Endnode EUI, 8 bytes little endian
+    uint64 endnode_eui = 2;
+    // Assigned queue ID for reference
+    uint64 dl_que_id = 3;
+    // Priority, higher values are prioritized, optional, default 0
+    optional float priority = 4;
+    // MPF header byte, 1 byte
+    optional uint32 format = 5;
+    // Downlink payload.
+    oneof payload {
+        // Acknowledgement downlink
+        DownlinkAck ack = 6;
+        // Unencrypted payload
+        DownlinkData data = 7;
+        // Encrypted payload
+        DownlinkDataEncrypted data_enc = 8;
+    };
+    // True to request End Point response, optional
+    optional bool response_exp = 9;
+    // True to request priority End Point response, optional
+    optional bool response_prio = 10;
+    // True to request further End Point DL window, optional
+    optional bool req_dl_window = 11;
+    /// True to send downlink only if End Point expects a response, optional
+    optional bool only_if_expected =12;
+}
+
+message DownlinkAck{}
+
+message DownlinkData{
+    // User data
+    bytes data = 1;
+}
+
+message DownlinkDataEncrypted{
+    // Data for each of the m packet counters
+    repeated bytes data = 1;
+    // Endnode packet counter for which the respective data entry is valid
+    repeated uint32 packet_cnt = 2;
+
+}

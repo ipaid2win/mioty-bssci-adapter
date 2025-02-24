@@ -9,8 +9,8 @@ option go_package = "mioty-bssci-adapter/internal/api/cmd";
 
 
 message PropagateEndnode{
-    // Endnode EUI.
-    bytes endnode_eui = 1;
+    // Endnode EUI, 8 bytes little endian
+    uint64 endnode_eui = 1;
     // Command.
     oneof command {
         // Server attachment
@@ -18,18 +18,18 @@ message PropagateEndnode{
         // Server detachment
         PropagateDetach prpDet = 3;
     };
-    // Whitelist of basestation EUIs.
+    // Whitelist of basestation EUIs in 8 bytes little endian.
     // Propagate message will be send to only included EUIs. 
     // Whitelist takes precedence over blacklist.
     // 
     // Empty whitelist and blacklist is broadcast.
-    repeated string bs_whitelist = 4;
-    // Blacklist of basestation EUIs.
+    repeated uint64 bs_whitelist = 4;
+    // Blacklist of basestation EUIs in 8 bytes little endian.
     // Propagate message will be send to all excluded EUIs. 
     // Whitelist takes precedence over blacklist.
     //
     // Empty whitelist and blacklist is broadcast.
-    repeated string bs_blacklist = 5;
+    repeated uint64 bs_blacklist = 5;
 }
 
 

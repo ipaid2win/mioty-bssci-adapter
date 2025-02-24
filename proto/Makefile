@@ -16,4 +16,5 @@ msg:
 
 cmd:
 	protoc ${PROTOC_ARGS} cmd/propagate_endnode.proto
+	protoc ${PROTOC_ARGS} cmd/enque_downlink.proto
 
