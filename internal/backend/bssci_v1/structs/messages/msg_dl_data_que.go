@@ -6,7 +6,7 @@ import (
 )
 
 //go:generate msgp
-//msgp:replace common.EUI64 with:[8]byte
+//msgp:shim common.EUI64 as:int64 using:common.Eui64toInt/common.Eui64FromInt
 
 // Downlink data queue
 //

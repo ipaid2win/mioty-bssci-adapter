@@ -32,7 +32,7 @@ func (e *EUI64) ToInt() int64 {
 }
 
 // helper function to parse eui64 into a int64 
-func Eui64toInt(e *EUI64) int64 {
+func Eui64toInt(e EUI64) int64 {
 	return e.ToInt()
 }
 
